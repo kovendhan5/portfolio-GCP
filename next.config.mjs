@@ -15,12 +15,16 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['firebasestorage.googleapis.com'],  // Add Firebase storage domain if you're using it
   },
+  trailingSlash: true,  // Important for correct routing in Firebase
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // Merge with user config if it exists
+  ...(userConfig?.default || {})
 }
 
 export default nextConfig
