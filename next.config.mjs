@@ -23,6 +23,7 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  output: 'export',
   // Merge with user config if it exists
   ...(userConfig?.default || {})
 }
