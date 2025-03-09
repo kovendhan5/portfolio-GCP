@@ -21,8 +21,11 @@ RUN if [ -d "functions" ]; then \
 
 # Build as a static site
 ENV NODE_ENV=production
-# Configure Next.js for static export
-RUN echo '/** @type {import("next").NextConfig} */\nconst nextConfig = { output: "export" };\nmodule.exports = nextConfig;' > next.config.js
+
+# Create a proper next.config.js file without newline issues
+RUN echo '/** @type {import("next").NextConfig} */' > next.config.js && \
+    echo 'const nextConfig = { output: "export" };' >> next.config.js && \
+    echo 'module.exports = nextConfig;' >> next.config.js
 
 # Build with increased memory limit
 ENV NODE_OPTIONS="--max-old-space-size=2048"
