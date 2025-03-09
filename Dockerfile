@@ -2,6 +2,9 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
+# Install build tools
+RUN apk add --no-cache python3 make g++
+
 # Copy package files and install dependencies
 COPY package.json ./
 RUN npm install
@@ -9,16 +12,17 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Remove or move Firebase functions directory (if it exists) before building
+RUN if [ -d "functions" ]; then \
+    echo "Found Firebase functions directory, moving it temporarily"; \
+    mkdir -p /tmp/functions-backup; \
+    mv functions /tmp/functions-backup; \
+    fi
+
 # Build as a static site
 ENV NODE_ENV=production
-# Preserve any existing configuration but ensure static export
-RUN if [ -f next.config.js ]; then \
-    sed -i 's/output:.*,/output: "export",/g' next.config.js || \
-    sed -i 's/module.exports = {/module.exports = {\n  output: "export",/g' next.config.js || \
-    echo '/** @type {import("next").NextConfig} */\nconst nextConfig = { output: "export" };\nmodule.exports = nextConfig;' > next.config.js; \
-    else \
-    echo '/** @type {import("next").NextConfig} */\nconst nextConfig = { output: "export" };\nmodule.exports = nextConfig;' > next.config.js; \
-    fi
+# Configure Next.js for static export
+RUN echo '/** @type {import("next").NextConfig} */\nconst nextConfig = { output: "export" };\nmodule.exports = nextConfig;' > next.config.js
 
 # Build with increased memory limit
 ENV NODE_OPTIONS="--max-old-space-size=2048"

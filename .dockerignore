@@ -12,6 +12,9 @@ out
 .git
 .github
 
+# Firebase related
+functions/
+
 # IDE files
 .idea
 .vscode
