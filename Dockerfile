@@ -1,70 +1,76 @@
-# Build stage with dependency installation
-FROM node:20-alpine AS deps
+# Use Node 20 Alpine as the base image for all stages
+FROM node:20-alpine AS base
 WORKDIR /app
 
-# Copy package files
-COPY package.json ./
-COPY package-lock.json* ./
+# Dependencies stage: install and cache node_modules
+FROM base AS deps
+# Install build toolchain for native dependencies
+RUN apk add --no-cache libc6-compat python3 make g++
 
-# Install dependencies with more verbose output
-RUN npm install --verbose
+# Copy package files only (for better caching)
+COPY package.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
 
 # Builder stage
-FROM node:20-alpine AS builder
+FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies and source code
+# Set Next.js telemetry to disabled
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Create an empty next.config.js if it doesn't exist
-RUN if [ ! -f next.config.js ]; then echo "/** @type {import('next').NextConfig} */\nconst nextConfig = {};\nmodule.exports = nextConfig;" > next.config.js; fi
+# Create minimal next.config.js if needed
+RUN if [ ! -f next.config.js ]; then \
+    echo "/** @type {import('next').NextConfig} */\nconst nextConfig = { output: 'standalone' };\nmodule.exports = nextConfig;" > next.config.js; \
+    fi
 
-# Create public directory in case it doesn't exist
-RUN mkdir -p /app/public
+# Create public directory if it doesn't exist
+RUN mkdir -p public
 
-# Build the application with additional debug information
-ENV NEXT_TELEMETRY_DISABLED=1
+# Increase memory limit for build
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN npm run build || (echo "Build failed" && exit 1)
 
-# Production stage - using slim node image
-FROM node:20-alpine AS runner
+# Run the build
+RUN npm run build
+
+# Production stage
+FROM base AS runner
 WORKDIR /app
 
-# Set environment variables for production
+# Set environment variables
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 
-# Don't run production as root
+# Create non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs && \
-    mkdir -p /app/.next && \
     chown -R nextjs:nodejs /app
 
-# Install only production dependencies
-COPY package.json ./
-RUN npm install --only=production && npm cache clean --force
-
-# Copy built application
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
+# Copy standalone build output from builder
+# This will grab only what's needed for production
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Install curl for health check and other necessary tools
-USER root
-RUN apk --no-cache add curl
-
-# Switch to non-root user
+# Use non-root user
 USER nextjs
 
 # Expose port
 EXPOSE 3000
 
-# Health check with appropriate timeout
+# Add health check (install curl first)
+USER root
+RUN apk --no-cache add curl
+USER nextjs
+
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:3000/ || exit 1
 
-# Start the application
-CMD ["npm", "start"]
+# Run app
+CMD ["node", "server.js"]

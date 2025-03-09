@@ -1,9 +1,11 @@
 steps:
-  # Build the container image with cache optimization
+  # Build the container image with optimal caching
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '--cache-from=gcr.io/$PROJECT_ID/portfolio:latest'
+      - '--build-arg=COMMIT_SHA=$COMMIT_SHA'
+      - '--build-arg=BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")'
       - '-t'
       - 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA'
       - '-t'
@@ -16,7 +18,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/portfolio:latest']
     
-  # Deploy container image to Cloud Run
+  # Deploy container image to Cloud Run with minimal settings for testing
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -27,17 +29,18 @@ steps:
       - '--region=us-central1'
       - '--platform=managed'
       - '--allow-unauthenticated'
-      - '--memory=512Mi'
+      - '--memory=256Mi'
       - '--cpu=1'
       - '--timeout=30s'
-      - '--concurrency=80'
+      - '--concurrency=10'
       - '--min-instances=0'
-      - '--max-instances=10'
+      - '--max-instances=2'
+      - '--set-env-vars=COMMIT_SHA=$COMMIT_SHA,BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")'
       
 images:
   - 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA'
   - 'gcr.io/$PROJECT_ID/portfolio:latest'
 
 options:
-  machineType: 'E2_HIGHCPU_8'
+  machineType: 'E2_MEDIUM'
   logging: CLOUD_LOGGING_ONLY
