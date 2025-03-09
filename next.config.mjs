@@ -1,31 +1,25 @@
-let userConfig = undefined
-try {
-  userConfig = await import('./v0-user-next.config')
-} catch (e) {
-  // ignore error
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  reactStrictMode: true,
+  swcMinify: true,
+  
+  // More permissive configuration for Docker environment
+  output: 'standalone',
+  
+  // Enable static export if that's what you're aiming for
+  // Uncomment if you're doing a static export
+  // output: 'export',
+  
+  // Simple image configuration
   images: {
-    unoptimized: true,
-    domains: ['firebasestorage.googleapis.com'],  // Add Firebase storage domain if you're using it
+    domains: [],
+    unoptimized: process.env.NODE_ENV !== 'production',
   },
-  trailingSlash: true,  // Important for correct routing in Firebase
+  
+  // Increase build timeout if needed
   experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
+    serverComponentsExternalPackages: [],
   },
-  output: 'export',
-  // Merge with user config if it exists
-  ...(userConfig?.default || {})
-}
+};
 
-export default nextConfig
+module.exports = nextConfig;

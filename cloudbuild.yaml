@@ -1,11 +1,20 @@
 steps:
-  # Build the container image
+  # Build the container image with cache optimization
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA', '.']
+    args:
+      - 'build'
+      - '--cache-from=gcr.io/$PROJECT_ID/portfolio:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/portfolio:latest'
+      - '.'
     
-  # Push the container image to Container Registry
+  # Push the container images to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/portfolio:latest']
     
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -18,6 +27,17 @@ steps:
       - '--region=us-central1'
       - '--platform=managed'
       - '--allow-unauthenticated'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--timeout=30s'
+      - '--concurrency=80'
+      - '--min-instances=0'
+      - '--max-instances=10'
       
 images:
   - 'gcr.io/$PROJECT_ID/portfolio:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/portfolio:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
