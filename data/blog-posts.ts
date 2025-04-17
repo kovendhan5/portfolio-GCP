@@ -1,5 +1,6 @@
 export const blogPosts = [
   {
+    id: 0,
     slug: "example-post",
     title: "Example Post",
     excerpt: "This is an example post",
