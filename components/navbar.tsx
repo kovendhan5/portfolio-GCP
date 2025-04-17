@@ -29,7 +29,7 @@ export default function Navbar() {
     { name: "Education", href: "/#education" },
     { name: "Certifications", href: "/#certifications" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
+    { name: "Contact", href: "/#contact" },
   ]
 
   const isActive = (href: string) => {

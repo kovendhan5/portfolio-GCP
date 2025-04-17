@@ -11,7 +11,7 @@ export default function Achievements() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up")
+            entry.target.classList.add("animate-fade-in-scale")
           }
         })
       },
@@ -50,6 +50,24 @@ export default function Achievements() {
       description: "Recognized for exceptional web design skills and creative implementation.",
       year: "2024",
     },
+    {
+      id: 4,
+      title: "CO CURRICULAR ACTIVITIES AWARD",
+      description: "Awarded for outstanding participation in co-curricular activities.",
+      year: "2025",
+    },
+    {
+      id: 5,
+      title: "APPRECIATION AWARD - NPTEL",
+      description: "Received appreciation award for NPTEL in July 2024.",
+      year: "2025",
+    },
+    {
+      id: 6,
+      title: "1st Place at Web Aesthetics Battle",
+      description: "Achieved first place for outstanding web aesthetics and design in 2025.",
+      year: "2025",
+    },
   ]
 
   return (
@@ -74,21 +92,21 @@ export default function Achievements() {
           {achievements.map((achievement, index) => (
             <div
               key={achievement.id}
-              className="bg-background/50 backdrop-blur-sm p-6 rounded-xl border border-border hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 group"
+              className="bg-background/50 backdrop-blur-sm p-6 rounded-xl border border-border transition-all duration-300 group hover:shadow-xl hover:scale-105"
               style={{
                 animationDelay: `${0.2 + index * 0.1}s`,
                 animationFillMode: "forwards",
               }}
             >
               <div className="flex flex-col items-center text-center">
-                <div className="p-4 rounded-full bg-primary/10 text-primary mb-4 group-hover:bg-primary/20 transition-colors duration-300">
+                <div className="p-4 rounded-full bg-primary/10 text-primary mb-4 group-hover:bg-white/20 group-hover:text-primary transition-colors duration-300">
                   <Trophy className="h-8 w-8" />
                 </div>
-                <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+                <h3 className="text-lg font-bold mb-2 transition-colors duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-500 group-hover:to-purple-600">
                   {achievement.title}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-2">{achievement.year}</p>
-                <p className="text-muted-foreground">{achievement.description}</p>
+                <p className="text-muted-foreground text-sm mb-2 transition-colors duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-500 group-hover:to-purple-600">{achievement.year}</p>
+                <p className="text-muted-foreground transition-colors duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-500 group-hover:to-purple-600">{achievement.description}</p>
               </div>
             </div>
           ))}

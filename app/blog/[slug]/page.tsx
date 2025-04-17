@@ -5,11 +5,14 @@ import { blogPosts } from "@/data/blog-posts"
 import { ArrowLeft, Calendar } from "lucide-react"
 import type { Metadata } from "next"
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  // Check if blogPosts is an array before using array methods
-  const post = Array.isArray(blogPosts) 
-    ? blogPosts.find((post) => post.slug === params.slug)
-    : null
+interface BlogPostPageProps {
+  params: {
+    slug: string
+  }
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const post = blogPosts.find((post) => post.slug === params.slug)
 
   if (!post) {
     return {
@@ -25,18 +28,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export async function generateStaticParams() {
-  if (!Array.isArray(blogPosts)) {
-    console.error('blogPosts is not an array:', blogPosts)
-    throw new Error('blogPosts is not an array in generateStaticParams')
-  }
-  return blogPosts.map((post) => ({ slug: post.slug }))
+  return blogPosts.map((post) => ({
+    slug: post.slug,
+  }))
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  // Check if blogPosts is an array before using array methods
-  const post = Array.isArray(blogPosts)
-    ? blogPosts.find((post) => post.slug === params.slug)
-    : null
+export default function BlogPostPage({ params }: BlogPostPageProps) {
+  const post = blogPosts.find((post) => post.slug === params.slug)
 
   if (!post) {
     notFound()

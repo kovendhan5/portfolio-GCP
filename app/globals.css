@@ -122,3 +122,48 @@
 .animate-fade-in {
   animation: fadeIn 1s ease-out forwards;
 }
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-left {
+  animation: fadeInFromLeft 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in-right {
+  animation: fadeInFromRight 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

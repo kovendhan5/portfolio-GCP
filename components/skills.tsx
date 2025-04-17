@@ -36,47 +36,47 @@ export default function Skills() {
       title: "Programming Languages",
       icon: <Code className="h-6 w-6" />,
       skills: [
-        { name: "Python", level: 85 },
-        { name: "Java", level: 80 },
-        { name: "C", level: 75 },
-        { name: "SQL", level: 85 },
-        { name: "HTML", level: 90 },
-        { name: "CSS", level: 85 },
-        { name: "JavaScript", level: 80 },
+        { name: "Python", level: "Advanced" },
+        { name: "Java", level: "Intermediate" },
+        { name: "C", level: "Intermediate" },
+        { name: "SQL", level: "Advanced" },
+        { name: "HTML", level: "Advanced" },
+        { name: "CSS", level: "Advanced" },
+        { name: "JavaScript", level: "Intermediate" },
       ],
     },
     {
       title: "Dev Tools & Technologies",
       icon: <Terminal className="h-6 w-6" />,
       skills: [
-        { name: "Visual Studio Code", level: 90 },
-        { name: "Jupyter Notebook", level: 85 },
-        { name: "Docker", level: 80 },
-        { name: "Git & GitHub", level: 85 },
-        { name: "Jenkins", level: 75 },
-        { name: "Kubernetes", level: 70 },
-        { name: "GitHub Actions", level: 80 },
-        { name: "GitLab", level: 75 },
+        { name: "Visual Studio Code", level: "Advanced" },
+        { name: "Jupyter Notebook", level: "Advanced" },
+        { name: "Docker", level: "Intermediate" },
+        { name: "Git & GitHub", level: "Advanced" },
+        { name: "Jenkins", level: "Intermediate" },
+        { name: "Kubernetes", level: "Basics" },
+        { name: "GitHub Actions", level: "Intermediate" },
+        { name: "GitLab", level: "Intermediate" },
       ],
     },
     {
       title: "Cloud Platforms",
       icon: <Cloud className="h-6 w-6" />,
       skills: [
-        { name: "AWS", level: 80 },
-        { name: "GCP", level: 75 },
-        { name: "Azure", level: 70 },
+        { name: "AWS", level: "Intermediate" },
+        { name: "GCP", level: "Basics" },
+        { name: "Azure", level: "Basics" },
       ],
     },
     {
       title: "Technical Skills",
       icon: <Server className="h-6 w-6" />,
       skills: [
-        { name: "CI/CD knowledge", level: 80 },
-        { name: "Networking Protocols", level: 75 },
-        { name: "Deployment", level: 85 },
-        { name: "Containers", level: 80 },
-        { name: "Configuration Management", level: 75 },
+        { name: "CI/CD knowledge", level: "Intermediate" },
+        { name: "Networking Protocols", level: "Basics" },
+        { name: "Deployment", level: "Advanced" },
+        { name: "Containers", level: "Intermediate" },
+        { name: "Configuration Management", level: "Basics" },
       ],
     },
   ]
@@ -113,22 +113,25 @@ export default function Skills() {
                 <div className="p-3 rounded-lg bg-primary/10 text-primary mr-4">{category.icon}</div>
                 <h3 className="text-xl font-bold">{category.title}</h3>
               </div>
-
               <div className="space-y-4">
                 {category.skills.map((skill, skillIndex) => (
                   <div key={skillIndex}>
-                    <div className="flex justify-between mb-1">
+                    <div className="flex justify-between items-center mb-1">
                       <span className="font-medium">{skill.name}</span>
-                      <span className="text-muted-foreground text-sm">{skill.level}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
-                      <motion.div
-                        className="bg-gradient-to-r from-cyan-500 to-purple-600 h-2.5 rounded-full"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 + skillIndex * 0.1 }}
-                      ></motion.div>
+                      <span
+                        className={
+                          [
+                            "text-xs font-semibold px-3 py-1 rounded-full border shadow-md",
+                            skill.level === "Advanced"
+                              ? "bg-gradient-to-r from-green-400 to-green-600 text-white border-green-500"
+                              : skill.level === "Intermediate"
+                              ? "bg-gradient-to-r from-yellow-300 to-yellow-500 text-yellow-900 border-yellow-400"
+                              : "bg-gradient-to-r from-red-300 to-red-500 text-red-900 border-red-400"
+                          ].join(" ")
+                        }
+                      >
+                        {skill.level}
+                      </span>
                     </div>
                   </div>
                 ))}

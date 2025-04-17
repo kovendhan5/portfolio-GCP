@@ -13,7 +13,7 @@ export default function About() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up")
+            entry.target.classList.add("animate-fade-in-scale")
           }
         })
       },
@@ -48,15 +48,16 @@ export default function About() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-            <div className="relative aspect-square overflow-hidden rounded-lg">
+          <div className="relative group flex justify-center items-center">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            <div className="relative w-40 h-40 md:w-56 md:h-56 overflow-hidden rounded-full shadow-lg border-4 border-primary/30">
               <Image
-                src="/placeholder.svg?height=400&width=400"
+                src="/extra/1000000125.jpg"
                 alt="Kovendhan P"
-                width={400}
-                height={400}
-                className="object-cover w-full h-full rounded-lg"
+                fill
+                className="object-cover w-full h-full rounded-full"
+                priority
+                sizes="(max-width: 768px) 160px, 224px"
               />
             </div>
           </div>
@@ -90,9 +91,10 @@ export default function About() {
 
             <div className="pt-4">
               <Link
-                href="/resume.pdf"
+                href="/extra/Kovendhan_P.pdf"
                 className="inline-flex items-center px-6 py-3 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200"
                 download
+                target="_blank"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Resume

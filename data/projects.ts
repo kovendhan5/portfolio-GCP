@@ -20,11 +20,11 @@ export const projects: Project[] = [
     description: "Machine learning solution using CNNs to detect and enhance pixelated image regions.",
     longDescription:
       "Designed a machine learning solution using Convolutional Neural Networks to detect and enhance pixelated image regions. Applied super-resolution techniques for image restoration, achieving high-quality results with 95% accuracy. Project certified by Intel. The system can automatically identify areas of an image that have been pixelated or are of low quality, and then apply targeted enhancement to improve visual clarity without affecting the rest of the image.",
-    featuredImage: "/placeholder.svg?height=400&width=600",
+    featuredImage: "public\extra\Screenshot 2025-04-17 152820.png?height=400&width=600",
     category: "ai",
     technologies: ["Python", "TensorFlow", "CNN", "Image Processing", "OpenCV"],
-    demoLink: "https://example.com/demo",
-    githubLink: "https://github.com/kovendhan5/pixelated-image-detection",
+    demoLink: "https://github.com/kovendhan5/intel-project",
+    githubLink: "https://github.com/kovendhan5/intel-project",
     date: "Apr 2024 - Jul 2024",
   },
   {
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     featuredImage: "/placeholder.svg?height=400&width=600",
     category: "web",
     technologies: ["React", "Next.js", "Tailwind CSS", "Firebase", "Vercel"],
-    demoLink: "https://example.com/demo",
+    demoLink: "https://kovendhan5.github.io/IEEE2/TechX/index.html",
     githubLink: "https://github.com/kovendhan5/ieee-techx-website",
     date: "Aug 2024",
   },
@@ -57,6 +57,19 @@ export const projects: Project[] = [
   },
   {
     id: 4,
+    title: "Personal Portfolio Website",
+    slug: "portfolio-website",
+    description: "My personal portfolio website built with Next.js and Tailwind CSS, hosted on Firebase.",
+    longDescription: "A modern, responsive portfolio website to showcase my projects, achievements, and skills. Built with Next.js, React, and Tailwind CSS. Features smooth animations, project filtering, and a blog section. Hosted on Firebase for fast and reliable delivery.",
+    featuredImage: "/placeholder.svg?height=400&width=600",
+    category: "web",
+    technologies: ["Next.js", "React", "Tailwind CSS", "TypeScript", "Firebase"],
+    demoLink: "https://your-firebase-app-url.web.app/", // Replace with actual Firebase URL after deployment
+    githubLink: "https://github.com/kovendhan5/portfolio",
+    date: "Apr 2025",
+  },
+  {
+    id: 5,
     title: "DevOps Website Deployment on GCP",
     slug: "devops-gcp-deployment",
     description: "Deployed a React-based website on GCP using Docker and Kubernetes with automated CI/CD pipelines.",
@@ -70,7 +83,7 @@ export const projects: Project[] = [
     date: "Jan 2025 - Feb 2025",
   },
   {
-    id: 5,
+    id: 6,
     title: "AI-Powered Personal Assistant",
     slug: "ai-personal-assistant",
     description: "Voice-controlled personal assistant using natural language processing and machine learning.",
@@ -84,7 +97,7 @@ export const projects: Project[] = [
     date: "Mar 2025 - May 2025",
   },
   {
-    id: 6,
+    id: 7,
     title: "Cloud-Based Inventory Management System",
     slug: "cloud-inventory-system",
     description: "Scalable inventory management system deployed on AWS with real-time tracking and analytics.",
@@ -98,7 +111,7 @@ export const projects: Project[] = [
     date: "Nov 2024 - Jan 2025",
   },
   {
-    id: 7,
+    id: 8,
     title: "Cross-Platform Mobile Fitness App",
     slug: "mobile-fitness-app",
     description: "Fitness tracking application for iOS and Android with workout plans and progress monitoring.",
@@ -112,7 +125,7 @@ export const projects: Project[] = [
     date: "Sep 2024 - Dec 2024",
   },
   {
-    id: 8,
+    id: 9,
     title: "E-commerce Platform with Microservices",
     slug: "ecommerce-microservices",
     description: "Scalable e-commerce platform built with microservices architecture and containerization.",
@@ -125,4 +138,5 @@ export const projects: Project[] = [
     githubLink: "https://github.com/kovendhan5/ecommerce-microservices",
     date: "Feb 2025 - Apr 2025",
   },
+  
 ]

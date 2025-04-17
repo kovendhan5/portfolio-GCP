@@ -1,15 +1,18 @@
-export const blogPosts = [
-  {
-    id: 0,
-    slug: "example-post",
-    title: "Example Post",
-    excerpt: "This is an example post",
-    content: "# Example Content\nThis is the content of the post.",
-    featuredImage: "/placeholder.svg",
-    category: "Example",
-    publishedDate: "2024-01-01",
-    tags: ["example", "test"],
-  },
+"use client"
+
+export interface BlogPost {
+  id: number
+  slug: string
+  title: string
+  excerpt: string
+  content: string
+  featuredImage: string
+  category: string
+  tags: string[]
+  publishedDate: string
+}
+
+export const blogPosts: BlogPost[] = [
   {
     id: 1,
     slug: "getting-started-with-aws",
