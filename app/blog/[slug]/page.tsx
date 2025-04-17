@@ -25,7 +25,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }))
+  // Ensure blogPosts is an array before mapping
+  if (!Array.isArray(blogPosts)) {
+    console.warn('blogPosts is not an array');
+    return [];
+  }
+  return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
