@@ -5,11 +5,13 @@ import Link from "next/link"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,14 +22,28 @@ export default function Navbar() {
   }, [])
 
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Skills", href: "#skills" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Education", href: "#education" },
-    { name: "Certifications", href: "#certifications" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/#about" },
+    { name: "Skills", href: "/#skills" },
+    { name: "Projects", href: "/projects" },
+    { name: "Experience", href: "/#experience" },
+    { name: "Education", href: "/#education" },
+    { name: "Certifications", href: "/#certifications" },
+    { name: "Blog", href: "/blog" },
+    { name: "Contact", href: "/contact" },
   ]
+
+  const isActive = (href: string) => {
+    if (href.startsWith("/#")) {
+      return pathname === "/"
+    }
+    if (href === "/blog" && pathname.startsWith("/blog/")) {
+      return true
+    }
+    if (href === "/projects" && pathname.startsWith("/projects/")) {
+      return true
+    }
+    return pathname === href
+  }
 
   return (
     <header
@@ -53,12 +69,18 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium"
+                className={cn(
+                  "text-sm font-medium transition-colors duration-200",
+                  isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary",
+                )}
                 onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector(link.href)?.scrollIntoView({
-                    behavior: "smooth",
-                  })
+                  if (link.href.startsWith("/#")) {
+                    e.preventDefault()
+                    const targetId = link.href.substring(2)
+                    document.querySelector(`#${targetId}`)?.scrollIntoView({
+                      behavior: "smooth",
+                    })
+                  }
                 }}
               >
                 {link.name}
@@ -100,13 +122,23 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-primary/10"
+                className={cn(
+                  "block px-3 py-2 rounded-md text-base font-medium",
+                  isActive(link.href)
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10",
+                )}
                 onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector(link.href)?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                  setMobileMenuOpen(false)
+                  if (link.href.startsWith("/#")) {
+                    e.preventDefault()
+                    const targetId = link.href.substring(2)
+                    document.querySelector(`#${targetId}`)?.scrollIntoView({
+                      behavior: "smooth",
+                    })
+                    setMobileMenuOpen(false)
+                  } else {
+                    setMobileMenuOpen(false)
+                  }
                 }}
               >
                 {link.name}
@@ -118,4 +150,3 @@ export default function Navbar() {
     </header>
   )
 }
-

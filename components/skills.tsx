@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { motion } from "framer-motion"
 import { Code, Cloud, Database, Server, Terminal, GitBranch, Cpu, Globe } from "lucide-react"
 
 export default function Skills() {
@@ -100,13 +101,13 @@ export default function Skills() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {skillCategories.map((category, index) => (
-            <div
+            <motion.div
               key={index}
               className="bg-background/50 backdrop-blur-sm rounded-xl p-6 border border-border shadow-lg hover:shadow-primary/5 transition-all duration-300"
-              style={{
-                animationDelay: `${0.2 + index * 0.1}s`,
-                animationFillMode: "forwards",
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="flex items-center mb-6">
                 <div className="p-3 rounded-lg bg-primary/10 text-primary mr-4">{category.icon}</div>
@@ -120,19 +121,19 @@ export default function Skills() {
                       <span className="font-medium">{skill.name}</span>
                       <span className="text-muted-foreground text-sm">{skill.level}%</span>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-2.5">
-                      <div
+                    <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+                      <motion.div
                         className="bg-gradient-to-r from-cyan-500 to-purple-600 h-2.5 rounded-full"
-                        style={{
-                          width: `${skill.level}%`,
-                          transition: "width 1s ease-in-out",
-                        }}
-                      ></div>
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: 0.2 + skillIndex * 0.1 }}
+                      ></motion.div>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -151,19 +152,23 @@ export default function Skills() {
             { name: "JavaScript", icon: <Code className="h-6 w-6" /> },
             { name: "SQL", icon: <Database className="h-6 w-6" /> },
           ].map((tech, index) => (
-            <div
+            <motion.div
               key={index}
               className="flex flex-col items-center justify-center p-4 bg-background/50 backdrop-blur-sm rounded-lg border border-border hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 group"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              whileHover={{ y: -5 }}
             >
               <div className="p-3 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
                 {tech.icon}
               </div>
               <span className="mt-2 text-sm font-medium">{tech.name}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
   )
 }
-

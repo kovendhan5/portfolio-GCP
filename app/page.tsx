@@ -10,6 +10,7 @@ import Achievements from "@/components/achievements"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import BlogPreview from "@/components/blog-preview"
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
           <Education />
           <Certifications />
           <Achievements />
+          <BlogPreview />
           <Contact />
         </main>
         <Footer />
@@ -32,4 +34,3 @@ export default function Home() {
     </ThemeProvider>
   )
 }
-

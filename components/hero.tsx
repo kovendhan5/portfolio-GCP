@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
+import Hero3D from "./hero-3d"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -101,43 +103,72 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary animate-fade-in">
-            Cloud & DevOps Engineer | Full Stack Developer
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 animate-gradient">
-            Hi, I&apos;m Kovendhan P
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Passionate about Cloud Platforms, DevOps, Cybersecurity, and Building User-Friendly Web Applications
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="#projects"
-              className="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
-              onClick={(e) => {
-                e.preventDefault()
-                document.querySelector("#projects")?.scrollIntoView({
-                  behavior: "smooth",
-                })
-              }}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            className="text-center lg:text-left"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div
+              className="inline-block mb-4 px-3 py-1 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
-              View My Work{" "}
-              <ArrowRight className="inline-block ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="#contact"
-              className="px-8 py-3 rounded-full bg-background border border-primary/20 text-primary hover:bg-primary/10 transition-all duration-300"
-              onClick={(e) => {
-                e.preventDefault()
-                document.querySelector("#contact")?.scrollIntoView({
-                  behavior: "smooth",
-                })
-              }}
+              Cloud & DevOps Engineer | Full Stack Developer
+            </motion.div>
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 animate-gradient"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              Contact Me
-            </Link>
-          </div>
+              Hi, I&apos;m Kovendhan P
+            </motion.h1>
+            <motion.p
+              className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              Passionate about Cloud Platforms, DevOps, Cybersecurity, and Building User-Friendly Web Applications
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Link
+                href="/projects"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
+              >
+                View My Work{" "}
+                <ArrowRight className="inline-block ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                href="/contact"
+                className="px-8 py-3 rounded-full bg-background border border-primary/20 text-primary hover:bg-primary/10 transition-all duration-300"
+              >
+                Contact Me
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="hidden lg:block"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-64 h-64 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-600/20 blur-3xl"></div>
+              </div>
+              <Hero3D />
+            </div>
+          </motion.div>
         </div>
       </div>
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
@@ -161,4 +192,3 @@ export default function Hero() {
     </section>
   )
 }
-

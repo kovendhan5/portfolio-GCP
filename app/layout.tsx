@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Kovendhan P - Cloud & DevOps Engineer | Full Stack Developer",
   description:
     "Personal portfolio of Kovendhan P, a Cloud & DevOps Engineer and Full Stack Developer specializing in web development and cloud technologies.",
+  keywords: ["Kovendhan", "Cloud Engineer", "DevOps", "Full Stack Developer", "Portfolio", "Web Development"],
+  authors: [{ name: "Kovendhan P" }],
+  creator: "Kovendhan P",
     generator: 'v0.dev'
 }
 
@@ -23,7 +26,6 @@ export default function RootLayout({
     </html>
   )
 }
-
 
 
 import './globals.css'
