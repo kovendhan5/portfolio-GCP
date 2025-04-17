@@ -25,11 +25,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export async function generateStaticParams() {
-  // Ensure blogPosts is treated as an array
-  const postsArray = Array.isArray(blogPosts) ? blogPosts : [];
-  return postsArray.map((post) => ({
-    slug: post.slug,
-  }))
+  return blogPosts.map((post) => ({ slug: post.slug }))
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {

@@ -1,76 +1,23 @@
-"use client"
-
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Calendar, ExternalLink, Github, Tag } from "lucide-react"
 import { projects } from "@/data/projects"
-import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 
 export async function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }))
 }
 
-export default function ProjectPage() {
-  const params = useParams()
-  const [project, setProject] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (params.slug) {
-      const foundProject = projects.find((p) => p.slug === params.slug)
-      setProject(foundProject)
-      setLoading(false)
-    }
-  }, [params.slug])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-background/90 pt-24 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="h-6 w-32 bg-muted/50 rounded-lg animate-pulse mb-8"></div>
-            <div className="bg-background/50 backdrop-blur-sm rounded-xl overflow-hidden border border-border shadow-lg">
-              <div className="aspect-video w-full bg-muted/50 animate-pulse"></div>
-              <div className="p-6 md:p-8">
-                <div className="h-8 w-3/4 bg-muted/50 rounded-lg animate-pulse mb-4"></div>
-                <div className="h-4 w-1/4 bg-muted/50 rounded-lg animate-pulse mb-6"></div>
-                <div className="space-y-3">
-                  <div className="h-4 w-full bg-muted/50 rounded-lg animate-pulse"></div>
-                  <div className="h-4 w-full bg-muted/50 rounded-lg animate-pulse"></div>
-                  <div className="h-4 w-3/4 bg-muted/50 rounded-lg animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+export default function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = projects.find((p) => p.slug === params.slug)
 
   if (!project) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-background/90 pt-24 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Home Navigation */}
-          <div className="mb-6 text-left">
-            <Link href="/" className="inline-block px-4 py-2 rounded bg-accent text-accent-foreground hover:bg-accent/80 transition font-medium">
-              Home
-            </Link>
-          </div>
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl font-bold mb-4">Project Not Found</h1>
-            <p className="text-muted-foreground mb-6">
-              The project you're looking for doesn't exist or has been removed.
-            </p>
-            <Link
-              href="/projects"
-              className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Projects
-            </Link>
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold mb-8">Project Not Found</h1>
+            <Link href="/projects" className="text-primary hover:underline">Back to Projects</Link>
           </div>
         </div>
       </div>
