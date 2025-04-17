@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { blogPosts } from "@/data/blog-posts"
-import { ArrowLeft, Calendar, Tag } from "lucide-react"
+import { ArrowLeft, Calendar } from "lucide-react"
 import type { Metadata } from "next"
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -25,12 +25,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export async function generateStaticParams() {
-  // Ensure blogPosts is an array before mapping
   if (!Array.isArray(blogPosts)) {
-    console.warn('blogPosts is not an array');
-    return [];
+    console.error('blogPosts is not an array:', blogPosts)
+    throw new Error('blogPosts is not an array in generateStaticParams')
   }
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  return blogPosts.map((post) => ({ slug: post.slug }))
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
@@ -108,8 +107,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                       key={index}
                       className="inline-flex items-center text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground"
                     >
-                      <Tag className="mr-1 h-3 w-3" />
-                      {tag}
+                      #{tag}
                     </span>
                   ))}
                 </div>

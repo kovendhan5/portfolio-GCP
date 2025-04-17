@@ -1,8 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Calendar, ExternalLink, Github, Tag } from "lucide-react"
+import { ArrowLeft, Calendar } from "lucide-react"
 import { projects } from "@/data/projects"
-import { motion } from "framer-motion"
 
 export async function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }))
@@ -43,11 +42,8 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
             Back to Projects
           </Link>
 
-          <motion.div
+          <div
             className="bg-background/50 backdrop-blur-sm rounded-xl overflow-hidden border border-border shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
             <div className="relative aspect-video w-full">
               <Image
@@ -86,8 +82,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                     key={index}
                     className="inline-flex items-center text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground"
                   >
-                    <Tag className="mr-1 h-3 w-3" />
-                    {tech}
+                    #{tech}
                   </span>
                 ))}
               </div>
@@ -103,7 +98,6 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:shadow-lg hover:shadow-primary/20 transition-all duration-300"
                 >
-                  <ExternalLink className="mr-2 h-4 w-4" />
                   Live Demo
                 </Link>
                 <Link
@@ -112,12 +106,11 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 rounded-lg bg-muted text-foreground hover:bg-muted/80 transition-all duration-300"
                 >
-                  <Github className="mr-2 h-4 w-4" />
                   View Source
                 </Link>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
