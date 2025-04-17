@@ -1,5 +1,3 @@
-"use client"
-
 export interface BlogPost {
   id: number
   slug: string
