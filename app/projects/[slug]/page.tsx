@@ -1,6 +1,12 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Calendar, ExternalLink, Github, Tag } from "lucide-react"
+import {
+  ArrowLeft as LucideArrowLeft,
+  Calendar as LucideCalendar,
+  ExternalLink as LucideExternalLink,
+  Github as LucideGithub,
+  Tag as LucideTag
+} from "lucide-react"
 import { projects } from "@/data/projects"
 import { motion } from "framer-motion"
 
