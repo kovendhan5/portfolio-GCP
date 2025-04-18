@@ -20,8 +20,15 @@ interface ProjectPageProps {
   params: { slug: string }
 }
 
-export default function ProjectPage({ params }: ProjectPageProps) {
-  const project = projects.find((p) => p.slug === params.slug)
+const ArrowLeft = LucideArrowLeft || (() => <span />)
+const Calendar = LucideCalendar || (() => <span />)
+const ExternalLink = LucideExternalLink || (() => <span />)
+const Github = LucideGithub || (() => <span />)
+const Tag = LucideTag || (() => <span />)
+
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug)
 
   if (!project) {
     return (

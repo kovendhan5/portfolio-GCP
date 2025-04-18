@@ -87,7 +87,8 @@ export default function ProjectsPage() {
                     transition: { duration: 0.2 },
                   }}
                 >
-                  <Link href={`/projects/${project.slug}`} className="block relative overflow-hidden aspect-video group">
+                  {/* Project image/preview with overlay */}
+                  <div className="relative overflow-hidden aspect-video group">
                     {project.githubLink === "https://github.com/kovendhan5/intel-project" ? (
                       <Image
                         src="/extra/Screenshot 2025-04-17 152820.png"
@@ -131,7 +132,7 @@ export default function ProjectsPage() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="flex gap-4">
-                        <Link
+                        <a
                           href={project.demoLink}
                           className="p-3 rounded-full bg-background/80 text-primary hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
                           aria-label="Live Demo"
@@ -140,8 +141,8 @@ export default function ProjectsPage() {
                           onClick={e => e.stopPropagation()}
                         >
                           <ExternalLink className="h-5 w-5" />
-                        </Link>
-                        <Link
+                        </a>
+                        <a
                           href={project.githubLink}
                           className="p-3 rounded-full bg-background/80 text-primary hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
                           aria-label="GitHub Repository"
@@ -150,7 +151,7 @@ export default function ProjectsPage() {
                           onClick={e => e.stopPropagation()}
                         >
                           <Github className="h-5 w-5" />
-                        </Link>
+                        </a>
                         <Link
                           href={`/projects/${project.slug}`}
                           className="p-3 rounded-full bg-background/80 text-primary hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
@@ -161,7 +162,7 @@ export default function ProjectsPage() {
                         </Link>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                   <div className="p-6">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-xs text-muted-foreground">{project.date}</span>
@@ -178,7 +179,9 @@ export default function ProjectsPage() {
                       </span>
                     </div>
                     <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">
-                      {project.title}
+                      <Link href={`/projects/${project.slug}`} className="hover:underline">
+                        {project.title}
+                      </Link>
                     </h3>
                     <p className="text-muted-foreground mb-4 line-clamp-3">{project.description}</p>
                     <div className="flex flex-wrap gap-2 mt-4">
