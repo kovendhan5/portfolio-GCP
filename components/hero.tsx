@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import Hero3D from "./hero-3d"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -165,6 +166,7 @@ export default function Hero() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-64 h-64 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-600/20 blur-3xl"></div>
               </div>
+              <Hero3D />
             </div>
           </motion.div>
         </div>
