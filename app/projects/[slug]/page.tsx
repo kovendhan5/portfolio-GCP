@@ -59,7 +59,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               transition={{ duration: 0.5 }}
             >
               <div className="relative aspect-video w-full">
-                {project.demoLink && project.demoLink !== "#" ? (
+                {/* Only embed iframe if demoLink is a valid embeddable URL (not GitHub) */}
+                {project.demoLink && project.demoLink !== "#" && !project.demoLink.includes("github.com") ? (
                   <iframe
                     src={project.demoLink}
                     title={project.title + ' Homepage'}

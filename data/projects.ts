@@ -20,7 +20,7 @@ export const projects: Project[] = [
     description: "Machine learning solution using CNNs to detect and enhance pixelated image regions.",
     longDescription:
       "Designed a machine learning solution using Convolutional Neural Networks to detect and enhance pixelated image regions. Applied super-resolution techniques for image restoration, achieving high-quality results with 95% accuracy. Project certified by Intel. The system can automatically identify areas of an image that have been pixelated or are of low quality, and then apply targeted enhancement to improve visual clarity without affecting the rest of the image.",
-    featuredImage: "public\extra\Screenshot 2025-04-17 152820.png?height=400&width=600",
+    featuredImage: "/extra/Screenshot 2025-04-17 152820.png",
     category: "ai",
     technologies: ["Python", "TensorFlow", "CNN", "Image Processing", "OpenCV"],
     demoLink: "https://github.com/kovendhan5/intel-project",
@@ -138,5 +138,4 @@ export const projects: Project[] = [
     githubLink: "https://github.com/kovendhan5/ecommerce-microservices",
     date: "Feb 2025 - Apr 2025",
   },
-  
 ]
