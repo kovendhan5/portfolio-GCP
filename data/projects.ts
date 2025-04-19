@@ -38,7 +38,7 @@ export const projects: Project[] = [
     category: "web",
     technologies: ["React", "Next.js", "Tailwind CSS", "Firebase", "Vercel"],
     demoLink: "https://kovendhan5.github.io/IEEE2/TechX/index.html",
-    githubLink: "https://github.com/kovendhan5/ieee-techx-website",
+    githubLink: "https://github.com/kovendhan5/IEEE2", // Updated GitHub link
     date: "Aug 2024",
   },
   {
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     featuredImage: "/placeholder.svg?height=400&width=600",
     category: "web",
     technologies: ["JavaScript", "Google Apps Script", "HTML", "CSS", "Google Drive API"],
-    demoLink: "https://example.com/demo",
+    demoLink: "https://script.google.com/macros/s/AKfycbzbSy4WOpBbaDXcwy7ffOoTnuPvrqHMwfQrBtp2iBqE4_-addxGXVod6A47iXT12MIdYA/exec", // Added demo link
     githubLink: "https://github.com/kovendhan5/student-code-sharing",
     date: "Jun 2024",
   },
@@ -64,8 +64,8 @@ export const projects: Project[] = [
     featuredImage: "/placeholder.svg?height=400&width=600",
     category: "web",
     technologies: ["Next.js", "React", "Tailwind CSS", "TypeScript", "Firebase"],
-    demoLink: "https://your-firebase-app-url.web.app/", // Replace with actual Firebase URL after deployment
-    githubLink: "https://github.com/kovendhan5/portfolio",
+    demoLink: "https://kovendhan.xyz/", // Updated demo link
+    githubLink: "https://github.com/kovendhan5/portfolio-GCP", // Updated GitHub link
     date: "Apr 2025",
   },
   {

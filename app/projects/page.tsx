@@ -113,7 +113,7 @@ export default function ProjectsPage() {
                         height={400}
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                       />
-                    ) : project.demoLink && project.demoLink !== "#" ? (
+                    ) : project.demoLink && project.demoLink !== "https://script.google.com/macros/s/AKfycbzbSy4WOpBbaDXcwy7ffOoTnuPvrqHMwfQrBtp2iBqE4_-addxGXVod6A47iXT12MIdYA/exec" ? (
                       <iframe
                         src={project.demoLink}
                         title={project.title + ' Homepage'}
