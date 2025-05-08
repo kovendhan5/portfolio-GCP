@@ -3,7 +3,7 @@
 This is a personal portfolio website built with Next.js, Tailwind CSS, and TypeScript. It showcases projects, skills, and experience.
 
 ## Features
-   
+          
 *   Project showcase with filtering
 *   Blog section
 *   Contact form
