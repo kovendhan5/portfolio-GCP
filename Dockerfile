@@ -25,12 +25,13 @@ FROM nginx:1.25-alpine AS runner
 # Copy the static files from the builder stage
 COPY --from=builder /app/out /usr/share/nginx/html
 
-# Copy a custom Nginx configuration file (optional, but recommended for Next.js routing)
-# If you have a custom nginx.conf, uncomment the next line and make sure the file exists
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the Nginx configuration template that uses the PORT environment variable
+COPY default.conf.template /etc/nginx/templates/default.conf.template
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080 by default, Cloud Run will override this with the PORT env var
+EXPOSE 8080
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx after substituting the PORT environment variable in the config
+# envsubst will replace ${PORT} in the template with the value of the PORT env var
+# and output it to the actual Nginx config file.
+CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
