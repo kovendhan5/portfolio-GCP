@@ -7,18 +7,22 @@ server {
     # Rewrite URLs for Next.js assets that are being requested without the _next prefix
     location ~* ^/static/(.*)$ {
         alias /usr/share/nginx/html/_next/static/$1;
-    }
-    
-    # Handle regular Next.js static assets
+    }    # Handle regular Next.js static assets
     location /_next/ {
         root /usr/share/nginx/html;
-    }    # Serve files from /extra directory and handle files directly at root
+        expires 7d;
+        add_header Pragma public;
+        add_header Cache-Control "public";
+        access_log off;
+    }
+    
+    # Serve files from /extra directory and handle files directly at root
     location /extra/ {
         alias /usr/share/nginx/html/extra/;
     }
     
     # Handle image files that might be requested directly at root
-    location ~ \.(jpg|jpeg|png|gif|ico|svg)$ {
+    location ~ ^/[^/]+\.(jpg|jpeg|png|gif|ico|svg)$ {
         root /usr/share/nginx/html;
         try_files $uri /extra/$uri =404;
     }
@@ -29,15 +33,9 @@ server {
         index index.html index.htm;
         # This is important for Next.js static export routing to work correctly
         try_files $uri $uri/ /index.html;
-    }
-
-    # Optional: You can add more specific configurations, like caching for static assets
-    location ~* \.(?:ico|css|js|gif|jpe?g|png|svg|webp|json)$ {
-        expires 7d;
-        add_header Pragma public;
-        add_header Cache-Control "public";
-        access_log off; # Optionally turn off access logs for static assets
-    }
+    }    # Cache settings for static assets (applied to all location blocks)
+    # We'll add the cache headers within the existing location blocks instead
+    # of using a separate location block that could cause conflicts
 
     # Optional: Error pages
     error_page   500 502 503 504  /50x.html;
