@@ -16,9 +16,6 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application code
 COPY . .
 
-# Remove public/index.html to prevent it from overwriting Next.js generated index.html
-RUN rm -f /app/public/index.html
-
 # Build the Next.js application for static export
 RUN npm run build
 

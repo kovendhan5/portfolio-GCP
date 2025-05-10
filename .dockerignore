@@ -1,0 +1,32 @@
+# Docker
+Dockerfile
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# Next.js build artifacts (these are generated inside the Docker build)
+.next/
+out/
+
+# Env files
+.env*.local
+.env
+*.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
