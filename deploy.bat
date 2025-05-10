@@ -19,16 +19,10 @@ IF %ERRORLEVEL% NEQ 0 (
   EXIT /B 1
 )
 
-REM Get the current project ID
-FOR /F "tokens=* USEBACKQ" %%F IN (`gcloud config get-value project`) DO (
-  SET PROJECT_ID=%%F
-)
+REM Set the project ID directly
+SET PROJECT_ID=encoded-metrics-451613-d0
 
-IF "%PROJECT_ID%"=="" (
-  ECHO No Google Cloud project is set. Please run:
-  ECHO gcloud config set project YOUR_PROJECT_ID
-  EXIT /B 1
-)
+ECHO Using project ID: %PROJECT_ID%
 
 SET REGION=us-central1
 SET REPOSITORY=kovendhan-portfolio

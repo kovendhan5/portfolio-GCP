@@ -7,7 +7,7 @@ spec:
     spec:
       serviceAccountName: portfolio-run-sa
       containers:
-        - image: REGION-docker.pkg.dev/PROJECT_ID/kovendhan-portfolio/portfolio:latest
+        - image: us-central1-docker.pkg.dev/encoded-metrics-451613-d0/kovendhan-portfolio/portfolio:latest
           ports:
             - containerPort: 8080
           env:
