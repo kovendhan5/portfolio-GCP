@@ -5,7 +5,11 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: portfolio-run-sa
       containers:
-        - image: docker.io/kovendhan5/kovendhan-portflio:latest
+        - image: REGION-docker.pkg.dev/PROJECT_ID/kovendhan-portfolio/portfolio:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"

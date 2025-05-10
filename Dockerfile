@@ -8,10 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-# If you are using npm:
 RUN npm install --legacy-peer-deps
-# If you are using yarn, uncomment the next line and comment out the npm install line
-# RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
@@ -19,11 +16,20 @@ COPY . .
 # Build the Next.js application for static export
 RUN npm run build
 
+# Output directory structure for debugging
+RUN find /app/out -type f | sort
+
 # Stage 2: Serve the static files with Nginx
 FROM nginx:1.25-alpine AS runner
 
 # Copy the static files from the builder stage
 COPY --from=builder /app/out /usr/share/nginx/html
+
+# Copy the public/extra directory to the right location
+COPY --from=builder /app/public/extra /usr/share/nginx/html/extra
+
+# Create necessary directories if they don't exist
+RUN mkdir -p /usr/share/nginx/html/_next
 
 # Copy the Nginx configuration template that uses the PORT environment variable
 COPY default.conf.template /etc/nginx/templates/default.conf.template

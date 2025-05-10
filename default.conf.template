@@ -4,9 +4,29 @@ server {
 
     server_name _; # Catch all hostnames
 
+    # Rewrite URLs for Next.js assets that are being requested without the _next prefix
+    location ~* ^/static/(.*)$ {
+        alias /usr/share/nginx/html/_next/static/$1;
+    }
+    
+    # Handle regular Next.js static assets
+    location /_next/ {
+        root /usr/share/nginx/html;
+    }    # Serve files from /extra directory and handle files directly at root
+    location /extra/ {
+        alias /usr/share/nginx/html/extra/;
+    }
+    
+    # Handle image files that might be requested directly at root
+    location ~ \.(jpg|jpeg|png|gif|ico|svg)$ {
+        root /usr/share/nginx/html;
+        try_files $uri /extra/$uri =404;
+    }
+
+    # Handle all other requests
     location / {
-        root   /usr/share/nginx/html;
-        index  index.html index.htm;
+        root /usr/share/nginx/html;
+        index index.html index.htm;
         # This is important for Next.js static export routing to work correctly
         try_files $uri $uri/ /index.html;
     }
