@@ -15,14 +15,16 @@ export async function generateStaticParams() {
 }
 
 interface ProjectPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // Keep icon fallback for the error case link
 const ArrowLeft = LucideArrowLeft || (() => <span />)
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
+export default async function ProjectPage({ params, searchParams }: ProjectPageProps) {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
   const project = projects.find((p) => p.slug === slug)
 
   // Runtime check for invalid or undefined project fields

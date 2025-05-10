@@ -6,13 +6,16 @@ import { ArrowLeft, Calendar } from "lucide-react"
 import type { Metadata } from "next"
 
 interface BlogPostPageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{
+    slug: string;
+  }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata({ params, searchParams }: BlogPostPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  // searchParams is optional, so we don't need to await it if it's not provided
+  const { slug } = resolvedParams;
   const post = blogPosts.find((post) => post.slug === slug)
 
   if (!post) {
@@ -34,8 +37,10 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
+export default async function BlogPostPage({ params, searchParams }: BlogPostPageProps) {
+  const resolvedParams = await params;
+  // searchParams is optional, so we don't need to await it if it's not provided
+  const { slug } = resolvedParams;
   const post = blogPosts.find((post) => post.slug === slug)
 
   if (!post) {
