@@ -53,7 +53,7 @@ For detailed deployment instructions, see the [DEPLOYMENT.md](DEPLOYMENT.md) fil
 
 This project is successfully deployed on Google Cloud Run using Docker containers. You can view the live deployment at [https://kovendhan-portfolio-74857330583.us-central1.run.app](https://kovendhan-portfolio-74857330583.us-central1.run.app).
 
-To deploy your own instance:
+To deploy your own instance: 
 
 1. Make sure you have the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) installed and configured
 2. Set up your Google Cloud project and enable the necessary APIs:
