@@ -41,10 +41,11 @@ RDS makes it easy to set up, operate, and scale a relational database in the clo
 
 ## Setting Up Your AWS Account
 
-1. **Create an AWS Account**: Visit the AWS website and sign up for a new account.
-2. **Set Up Multi-Factor Authentication (MFA)**: Enhance security by enabling MFA for your root account.
-3. **Create IAM Users**: Instead of using your root account, create IAM users with specific permissions.
-4. **Set Up Billing Alerts**: Configure billing alerts to monitor your AWS spending.
+1. **Create an AWS Account**: Visit the AWS website and sign up for a new account. You'll get access to the AWS Free Tier, which includes 750 hours of EC2 t2.micro instances per month for 12 months.
+2. **Set Up Multi-Factor Authentication (MFA)**: Enhance security by enabling MFA for your root account using an authenticator app like Google Authenticator or Authy.
+3. **Create IAM Users**: Instead of using your root account, create IAM users with specific permissions following the principle of least privilege.
+4. **Set Up Billing Alerts**: Configure billing alerts and budgets in AWS Cost Management to monitor your AWS spending and avoid unexpected charges.
+5. **Enable CloudTrail**: Set up AWS CloudTrail for logging and monitoring API calls across your AWS infrastructure.
 
 ## Your First AWS Project: Hosting a Static Website
 
@@ -69,8 +70,7 @@ Let's walk through hosting a static website on AWS using S3:
 AWS offers a vast array of services that can seem overwhelming at first. By starting with the basics and gradually exploring more services, you can harness the power of cloud computing for your projects. Remember that AWS has excellent documentation and a supportive community to help you along the way.
 
 Happy cloud computing!
-    `,
-    featuredImage: "/placeholder.svg?height=600&width=1200",
+    `,    featuredImage: "/images/blog/aws-logo.png",
     category: "Cloud Computing",
     tags: ["AWS", "Cloud", "DevOps", "Beginners"],
     publishedDate: "April 15, 2025",
@@ -109,7 +109,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -118,18 +118,25 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
-        node-version: '16'
+        node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
       run: npm ci
       
-    - name: Run tests
-      run: npm test
+    - name: Run linting
+      run: npm run lint
+      
+    - name: Run tests with coverage
+      run: npm run test:coverage
+      
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
       
     - name: Build
       run: npm run build
@@ -222,8 +229,7 @@ steps:
 A well-designed CI/CD pipeline can significantly improve your development process by automating testing and deployment. GitHub Actions provides a powerful and flexible platform for implementing CI/CD directly within your GitHub repository.
 
 By following the steps and best practices outlined in this article, you can create a robust CI/CD pipeline that will help your team deliver high-quality software more efficiently.
-    `,
-    featuredImage: "/placeholder.svg?height=600&width=1200",
+    `,    featuredImage: "/images/blog/github-actions.svg",
     category: "DevOps",
     tags: ["CI/CD", "GitHub Actions", "Automation", "DevOps"],
     publishedDate: "March 22, 2025",
@@ -238,9 +244,50 @@ By following the steps and best practices outlined in this article, you can crea
 
 React continues to evolve, and staying up-to-date with best practices is essential for writing clean, efficient, and maintainable code. In this article, we'll explore the most important React best practices for 2025.
 
-## Use Functional Components and Hooks
+## Use React 19 Features
 
-Class components are now considered legacy. Functional components with hooks provide a more concise and readable way to write React code:
+React 19 introduces several new features that improve performance and developer experience:
+
+\`\`\`jsx
+import { use, useFormStatus } from 'react';
+
+// React 19 Actions for form handling
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? 'Submitting...' : 'Submit'}
+    </button>
+  );
+}
+
+// Server Actions integration
+async function submitForm(formData) {
+  'use server';
+  // Handle form submission
+}
+\`\`\`
+
+## Implement the New React Compiler
+
+The React Compiler automatically optimizes your components, reducing the need for manual memoization:
+
+\`\`\`jsx
+// With React Compiler, manual optimizations are often unnecessary
+function ExpensiveComponent({ data, query }) {
+  // The compiler automatically optimizes this
+  const filteredData = data.filter(item => item.name.includes(query));
+  
+  return (
+    <ul>
+      {filteredData.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}
+\`\`\`
 
 \`\`\`jsx
 // Instead of this:
@@ -467,8 +514,7 @@ function SearchInput() {
 ## Conclusion
 
 By following these best practices, you'll write more efficient, maintainable, and user-friendly React applications. Remember that the React ecosystem is constantly evolving, so stay updated with the latest developments and adjust your practices accordingly.
-    `,
-    featuredImage: "/placeholder.svg?height=600&width=1200",
+    `,    featuredImage: "/images/blog/react-logo.png",
     category: "Web Development",
     tags: ["React", "JavaScript", "Frontend", "Best Practices"],
     publishedDate: "February 10, 2025",
@@ -584,14 +630,32 @@ sudo apt-get update && sudo apt-get install -y kubectl
 
 ### 2. Set Up a Local Kubernetes Cluster
 
-For local development, you can use Minikube:
+For local development, you have several options in 2025:
 
+**Option 1: Docker Desktop (Easiest)**
+\`\`\`bash
+# Enable Kubernetes in Docker Desktop settings
+# No additional installation required
+\`\`\`
+
+**Option 2: Minikube (Most flexible)**
 \`\`\`bash
 # Install Minikube
-brew install minikube
+brew install minikube  # macOS
+choco install minikube # Windows
+sudo apt-get install minikube # Ubuntu
 
-# Start Minikube
-minikube start
+# Start Minikube with specific Kubernetes version
+minikube start --kubernetes-version=v1.30.0
+\`\`\`
+
+**Option 3: Kind (Kubernetes in Docker)**
+\`\`\`bash
+# Install Kind
+go install sigs.k8s.io/kind@v0.22.0
+
+# Create a cluster
+kind create cluster --name dev-cluster
 \`\`\`
 
 ## Deploying Your First Application
@@ -666,8 +730,7 @@ kubectl set image deployment/hello-node hello-node=k8s.gcr.io/echoserver:1.5
 Kubernetes provides a powerful platform for deploying and managing containerized applications. By understanding the basic concepts and following best practices, you can leverage Kubernetes to build scalable and resilient applications.
 
 This guide has only scratched the surface of what Kubernetes can do. As you become more comfortable with the basics, explore advanced topics like StatefulSets, DaemonSets, and Operators to fully harness the power of Kubernetes.
-    `,
-    featuredImage: "/placeholder.svg?height=600&width=1200",
+    `,    featuredImage: "/images/blog/kubernetes-logo.png",
     category: "DevOps",
     tags: ["Kubernetes", "Containers", "DevOps", "Docker"],
     publishedDate: "January 5, 2025",
@@ -682,15 +745,17 @@ This guide has only scratched the surface of what Kubernetes can do. As you beco
 
 As technology evolves, so do cyber threats. Staying ahead of potential security risks is crucial for individuals and organizations alike. This article outlines essential cybersecurity best practices for 2025.
 
-## Understanding the Current Threat Landscape
+## Understanding the 2025 Threat Landscape
 
-The cybersecurity landscape is constantly changing, with new threats emerging regularly:
+The cybersecurity landscape has evolved significantly, with new threats emerging:
 
-- **Ransomware attacks** continue to target organizations of all sizes
-- **Supply chain attacks** compromise trusted software providers
-- **AI-powered attacks** use machine learning to evade detection
-- **IoT vulnerabilities** expose networks through connected devices
-- **Cloud security challenges** as more data moves to cloud platforms
+- **AI-powered social engineering** using deepfakes and voice cloning
+- **Quantum computing threats** to current encryption methods
+- **Supply chain attacks** targeting software dependencies and CI/CD pipelines
+- **Cloud-native threats** exploiting containerized and serverless environments
+- **Ransomware-as-a-Service (RaaS)** making attacks more accessible
+- **API security vulnerabilities** as microservices adoption increases
+- **IoT and edge computing vulnerabilities** expanding attack surfaces
 
 ## Essential Security Measures
 
@@ -759,9 +824,23 @@ Secure all devices that connect to your network:
 - Control which applications can run on endpoints
 - Enforce device encryption
 
-### 8. Monitor and Respond to Threats
+### 9. Prepare for Post-Quantum Cryptography
 
-Detect and respond to security incidents quickly:
+With quantum computers becoming more powerful, prepare for the transition:
+
+- Monitor NIST's post-quantum cryptography standards
+- Inventory current cryptographic implementations
+- Plan migration strategies for quantum-resistant algorithms
+- Implement crypto-agility in your systems
+
+### 10. Secure AI and Machine Learning Systems
+
+As AI adoption increases, secure your ML pipeline:
+
+- Validate training data to prevent data poisoning
+- Implement model versioning and provenance tracking
+- Monitor for adversarial attacks on ML models
+- Secure API endpoints serving ML predictions
 
 - Implement a security information and event management (SIEM) system
 - Establish a security operations center (SOC) or use a managed service
@@ -806,8 +885,7 @@ Stay compliant with evolving regulations:
 Cybersecurity is not a one-time effort but a continuous process. By implementing these best practices, you can significantly reduce your risk of falling victim to cyber attacks. Remember that security is everyone's responsibility, and creating a culture of security awareness is just as important as implementing technical controls.
 
 Stay vigilant, stay informed, and prioritize security in all aspects of your digital life.
-    `,
-    featuredImage: "/placeholder.svg?height=600&width=1200",
+    `,    featuredImage: "/images/blog/cybersecurity.png",
     category: "Cybersecurity",
     tags: ["Security", "Cybersecurity", "Data Protection", "Best Practices"],
     publishedDate: "December 12, 2024",

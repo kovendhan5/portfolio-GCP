@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import { ArrowRight, Github, Linkedin } from "lucide-react"
+import Link from "next/link"
+import { useEffect, useRef } from "react"
 import Hero3D from "./hero-3d"
 
 export default function Hero() {
@@ -125,15 +125,41 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               Hi, I&apos;m Kovendhan P
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0"
+            </motion.h1>            <motion.p
+              className="text-xl md:text-2xl text-muted-foreground mb-6 max-w-2xl mx-auto lg:mx-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               Passionate about Cloud Platforms, DevOps, Cybersecurity, and Building User-Friendly Web Applications
             </motion.p>
+            
+            {/* Social Media Links */}
+            <motion.div
+              className="flex gap-4 justify-center lg:justify-start mb-8"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.45 }}
+            >
+              <Link
+                href="https://github.com/Kovendhan5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-primary/20 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/40 transition-all duration-300 group"
+              >
+                <Github className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                <span className="sr-only">GitHub Profile</span>
+              </Link>
+              <Link
+                href="https://linkedin.com/in/kovendhan-p"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-primary/20 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/40 transition-all duration-300 group"
+              >
+                <Linkedin className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                <span className="sr-only">LinkedIn Profile</span>
+              </Link>
+            </motion.div>
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               initial={{ opacity: 0, y: 20 }}
