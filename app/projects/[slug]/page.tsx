@@ -1,17 +1,15 @@
-import Link from "next/link"
-import Image from "next/image"
+import ProjectDetails from "@/components/project-details"; // Import the new client component
 import { projects } from "@/data/projects"
-import ProjectDetails from "@/components/project-details" // Import the new client component
 import {
-  ArrowLeft as LucideArrowLeft,
+    ArrowLeft as LucideArrowLeft,
 } from "lucide-react"
+import Link from "next/link"
 
 export async function generateStaticParams() {
-  // Return only a subset of known-good projects to avoid build errors
-  return [
-    { slug: 'portfolio-website' },
-    // Add other known slugs if needed, or fetch all slugs dynamically
-  ]
+  // Return all project slugs for static generation
+  return projects.map((project) => ({
+    slug: project.slug,
+  }))
 }
 
 interface ProjectPageProps {

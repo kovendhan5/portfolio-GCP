@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { projects } from "@/data/projects"
+import { ExternalLink, Github, Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Github, Search } from "lucide-react"
-import { projects } from "@/data/projects"
+import { useRef, useState } from "react"
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -63,19 +63,19 @@ export default function Projects() {
                 animationFillMode: "forwards",
               }}
               onClick={() => window.location.href = `/projects/${project.slug}`}
-            >
-              <div className="relative overflow-hidden aspect-video">
-                {project.githubLink === "https://github.com/kovendhan5/intel-project" ? (
+            >              <div className="relative overflow-hidden aspect-video">
+                {/* Prioritize new GitHub screenshot images for the first 4 projects */}
+                {project.id <= 4 ? (
                   <Image
-                    src="/extra/Screenshot 2025-04-17 152820.png"
-                    alt={project.title + ' Screenshot'}
+                    src={project.featuredImage || "/placeholder.svg"}
+                    alt={project.title}
                     width={600}
                     height={400}
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                   />
-                ) : project.id === 3 ? (
+                ) : project.githubLink === "https://github.com/kovendhan5/intel-project" ? (
                   <Image
-                    src="/extra/Screenshot 2025-04-17 164806.png"
+                    src="/extra/Screenshot 2025-04-17 152820.png"
                     alt={project.title + ' Screenshot'}
                     width={600}
                     height={400}

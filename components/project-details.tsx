@@ -1,9 +1,9 @@
 "use client"
 
-import Link from "next/link"
-import Image from "next/image"
+import type { Project } from "@/data/projects"; // Assuming you have a Project type defined
 import { motion } from "framer-motion"
-import type { Project } from "@/data/projects" // Assuming you have a Project type defined
+import Image from "next/image"
+import Link from "next/link"
 
 interface ProjectDetailsProps {
   project: Project
@@ -16,10 +16,17 @@ export default function ProjectDetails({ project }: ProjectDetailsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-    >
-      <div className="relative aspect-video w-full">
-        {/* Only embed iframe if demoLink is a valid embeddable URL (not GitHub) */}
-        {project.demoLink && project.demoLink !== "#" && !project.demoLink.includes("github.com") ? (
+    >      <div className="relative aspect-video w-full">
+        {/* Prioritize screenshot images for the first 4 projects */}
+        {project.id <= 4 ? (
+          <Image
+            src={project.featuredImage || "/placeholder.svg"}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : project.demoLink && project.demoLink !== "#" && !project.demoLink.includes("github.com") ? (
           <iframe
             src={project.demoLink}
             title={project.title + ' Homepage'}

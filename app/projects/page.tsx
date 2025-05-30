@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ExternalLink, Github, Search } from "lucide-react"
+import Navbar from "@/components/navbar"
+import { useTheme } from "@/components/theme-provider"
 import { projects } from "@/data/projects"
 import { motion } from "framer-motion"
-import { useTheme } from "@/components/theme-provider"
-import Navbar from "@/components/navbar"
+import { ExternalLink, Github, Search } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useState } from "react"
 
 export default function ProjectsPage() {
   const [filter, setFilter] = useState<string>("all")
@@ -86,10 +86,18 @@ export default function ProjectsPage() {
                     y: -5,
                     transition: { duration: 0.2 },
                   }}
-                >
-                  {/* Project image/preview with overlay */}
+                >                  {/* Project image/preview with overlay */}
                   <div className="relative overflow-hidden aspect-video group">
-                    {project.githubLink === "https://github.com/kovendhan5/intel-project" ? (
+                    {/* Prioritize new GitHub screenshot images for the first 4 projects */}
+                    {project.id <= 4 ? (
+                      <Image
+                        src={project.featuredImage || "/placeholder.svg"}
+                        alt={project.title}
+                        width={600}
+                        height={400}
+                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : project.githubLink === "https://github.com/kovendhan5/intel-project" ? (
                       <Image
                         src="/extra/Screenshot 2025-04-17 152820.png"
                         alt={project.title + ' Screenshot'}
@@ -104,14 +112,6 @@ export default function ProjectsPage() {
                         className="w-full h-full min-h-[300px] border-none rounded"
                         style={{ background: '#fff' }}
                         loading="lazy"
-                      />
-                    ) : project.id === 3 ? (
-                      <Image
-                        src="/extra/Screenshot 2025-04-17 164806.png"
-                        alt={project.title + ' Screenshot'}
-                        width={600}
-                        height={400}
-                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : project.demoLink && project.demoLink !== "https://script.google.com/macros/s/AKfycbzbSy4WOpBbaDXcwy7ffOoTnuPvrqHMwfQrBtp2iBqE4_-addxGXVod6A47iXT12MIdYA/exec" ? (
                       <iframe

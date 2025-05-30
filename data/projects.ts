@@ -15,6 +15,58 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
+    title: "Helpdesk Ticketing System",
+    slug: "helpdesk-ticketing-system",
+    description: "Full-stack helpdesk ticketing system with React, Node.js, PostgreSQL, deployed on GCP with Terraform and CI/CD.",    longDescription:
+      "A comprehensive helpdesk ticketing system built with modern full-stack technologies and deployed on Google Cloud Platform. Features include user registration and authentication with JWT, ticket creation with priority levels, admin dashboard for ticket management, and real-time status updates. The system implements enterprise-grade security with OWASP-compliant password validation, rate limiting, input sanitization, and CSRF protection. Infrastructure is managed as code using Terraform, with automated CI/CD pipelines via GitHub Actions for seamless deployment to GCP Compute Engine with Cloud SQL PostgreSQL backend.",
+    featuredImage: "/images/projects/Screenshot 2025-05-30 204300.png",
+    category: "web",
+    technologies: ["React", "Node.js", "Express.js", "PostgreSQL", "JWT", "Terraform", "GCP", "GitHub Actions", "NGINX"],
+    demoLink: "#",
+    githubLink: "https://github.com/kovendhan5/Helpdesk-Ticketing-System",
+    date: "May 2025",
+  },
+  {
+    id: 2,
+    title: "Kali Linux Dockerized Environment",
+    slug: "kali-dockerized",
+    description: "Optimized Docker containers for Kali Linux with GUI access via RDP/VNC, multiple variants for different use cases.",    longDescription:
+      "A comprehensive Docker solution for running Kali Linux with graphical user interfaces accessible via Remote Desktop Protocol (RDP) or VNC. Features multiple optimized image variants ranging from ultra-minimal (539MB) to full-featured (4.47GB) versions. Includes automated build scripts, data persistence solutions, and one-click deployment options. The project demonstrates advanced Docker optimization techniques, achieving up to 75% size reduction while maintaining full functionality. Published to both Docker Hub and GitHub Container Registry with automated CI/CD pipelines for continuous integration and deployment.",
+    featuredImage: "/images/projects/Screenshot 2025-05-30 204400.png",
+    category: "devops",
+    technologies: ["Docker", "Kali Linux", "XFCE", "RDP", "VNC", "GitHub Actions", "PowerShell", "Shell Scripting"],
+    demoLink: "https://hub.docker.com/r/kovendhan5/kali-dockerized",
+    githubLink: "https://github.com/kovendhan5/kali-dockerized",
+    date: "April 2025",
+  },
+  {
+    id: 3,
+    title: "Distributed Voting Application",
+    slug: "voting-app",
+    description: "Microservices-based voting application demonstrating distributed architecture with Python, Node.js, .NET, Redis, and PostgreSQL.",    longDescription:
+      "A distributed voting application that showcases microservices architecture and container orchestration. The system consists of a Python Flask frontend for voting, Redis queue for vote collection, .NET worker service for vote processing, PostgreSQL database for persistence, and Node.js backend for real-time results display. Supports deployment via Docker Compose for development and Kubernetes for production environments. Includes comprehensive health checks, scaling capabilities, and demonstrates how different technologies can work together in a distributed system. Features real-time vote counting and results visualization with proper session management to prevent duplicate voting.",
+    featuredImage: "/images/projects/Screenshot 2025-05-30 204459.png",
+    category: "devops",
+    technologies: ["Python", "Node.js", ".NET", "Redis", "PostgreSQL", "Docker", "Kubernetes", "Docker Compose"],
+    demoLink: "#",
+    githubLink: "https://github.com/kovendhan5/voting-app",
+    date: "April - May 2025",
+  },
+  {
+    id: 4,
+    title: "PipeGuard - CI/CD Pipeline Monitor",
+    slug: "pipeguard",
+    description: "DevOps monitoring tool for GitHub Actions pipelines with anomaly detection and real-time dashboard on Google Cloud.",    longDescription:
+      "PipeGuard is an intelligent DevOps monitoring system that tracks GitHub Actions pipeline health and detects anomalies in real-time. The system automatically identifies performance issues such as builds taking longer than usual, failed pipeline runs, and provides intelligent suggestions for fixes. Built using serverless Google Cloud architecture with Cloud Functions for data collection, Firestore for storage, App Engine for the dashboard, and Cloud Scheduler for automated monitoring. Features an interactive Flask-based dashboard that visualizes pipeline health metrics, recent runs, and anomaly trends. Demonstrates advanced DevOps practices including infrastructure as code, serverless computing, and automated monitoring.",
+    featuredImage: "/images/projects/Screenshot 2025-05-30 213406.png",
+    category: "devops",
+    technologies: ["Python", "Flask", "Google Cloud Functions", "Firestore", "App Engine", "Cloud Scheduler", "GitHub Actions"],
+    demoLink: "https://pipeguard.uc.r.appspot.com/",
+    githubLink: "https://github.com/kovendhan5/PipeGuard",
+    date: "March 2025",
+  },
+  {
+    id: 5,
     title: "Pixelated Image Detection and Correction",
     slug: "pixelated-image-detection",
     description: "Machine learning solution using CNNs to detect and enhance pixelated image regions.",
@@ -26,9 +78,8 @@ export const projects: Project[] = [
     demoLink: "https://github.com/kovendhan5/intel-project",
     githubLink: "https://github.com/kovendhan5/intel-project",
     date: "Apr 2024 - Jul 2024",
-  },
-  {
-    id: 2,
+  },  {
+    id: 6,
     title: "IEEE Techx Event Website",
     slug: "ieee-techx-website",
     description: "Official website for the IEEE Techx event, showcasing details and schedules.",
@@ -42,13 +93,13 @@ export const projects: Project[] = [
     date: "Aug 2024",
   },
   {
-    id: 3,
+    id: 7,
     title: "Student Code and Notes Sharing Platform",
     slug: "student-code-sharing",
     description: "Platform for students to share programming code and notes using the Google Drive API.",
     longDescription:
       "Created a comprehensive platform for students to share programming code and educational notes using the Google Drive API. Built with Google Apps Script, the platform facilitates easy file uploads, access management, and collaboration between students. Features include syntax highlighting for code snippets, version control for documents, commenting functionality, and search capabilities to find relevant resources quickly. The platform also includes authentication to ensure only authorized users can access certain materials.",
-    featuredImage: "/placeholder.svg?height=400&width=600",
+    featuredImage: "extra/Screenshot 2025-04-17 164806.png",
     category: "web",
     technologies: ["JavaScript", "Google Apps Script", "HTML", "CSS", "Google Drive API"],
     demoLink: "https://script.google.com/macros/s/AKfycbzbSy4WOpBbaDXcwy7ffOoTnuPvrqHMwfQrBtp2iBqE4_-addxGXVod6A47iXT12MIdYA/exec", // Added demo link
@@ -56,7 +107,7 @@ export const projects: Project[] = [
     date: "Jun 2024",
   },
   {
-    id: 4,
+    id: 8,
     title: "Personal Portfolio Website",
     slug: "portfolio-website",
     description: "My personal portfolio website built with Next.js and Tailwind CSS, hosted on Firebase.",
@@ -69,21 +120,20 @@ export const projects: Project[] = [
     date: "Apr 2025",
   },
   {
-    id: 5,
+    id: 9,
     title: "DevOps Website Deployment on GCP",
     slug: "devops-gcp-deployment",
     description: "Deployed a React-based website on GCP using Docker and Kubernetes with automated CI/CD pipelines.",
-    longDescription:
-      "Deployed a React-based website on Google Cloud Platform using Docker and Kubernetes with automated CI/CD pipelines via GitHub Actions. Managed containerized applications, ensuring scalability and reliability with Kubernetes clusters and GCP services. Implemented infrastructure as code using Terraform to provision and manage cloud resources. Set up monitoring and alerting using Prometheus and Grafana to ensure high availability and performance of the application.",
-    featuredImage: "/placeholder.svg?height=400&width=600",
+    longDescription:"Deployed a React-based website on Google Cloud Platform using Docker and Kubernetes with automated CI/CD pipelines via GitHub Actions. Managed containerized applications, ensuring scalability and reliability with Kubernetes clusters and GCP services. Implemented infrastructure as code using Terraform to provision and manage cloud resources. Set up monitoring and alerting using Prometheus and Grafana to ensure high availability and performance of the application.",
+    featuredImage: "/images/projects/Screenshot 2025-05-30 220136.png",
     category: "devops",
     technologies: ["Docker", "Kubernetes", "GCP", "GitHub Actions", "React", "Terraform", "Prometheus"],
-    demoLink: "https://example.com/demo",
+    demoLink: "https://github.com/kovendhan5/devops-gcp-deployment",
     githubLink: "https://github.com/kovendhan5/devops-gcp-deployment",
     date: "Jan 2025 - Feb 2025",
   },
   {
-    id: 6,
+    id: 10,
     title: "AI-Powered Personal Assistant",
     slug: "ai-personal-assistant",
     description: "Voice-controlled personal assistant using natural language processing and machine learning.",
@@ -97,7 +147,7 @@ export const projects: Project[] = [
     date: "Mar 2025 - May 2025",
   },
   {
-    id: 7,
+    id: 11,
     title: "Cloud-Based Inventory Management System",
     slug: "cloud-inventory-system",
     description: "Scalable inventory management system deployed on AWS with real-time tracking and analytics.",
@@ -111,7 +161,7 @@ export const projects: Project[] = [
     date: "Nov 2024 - Jan 2025",
   },
   {
-    id: 8,
+    id: 12,
     title: "Cross-Platform Mobile Fitness App",
     slug: "mobile-fitness-app",
     description: "Fitness tracking application for iOS and Android with workout plans and progress monitoring.",
@@ -123,9 +173,8 @@ export const projects: Project[] = [
     demoLink: "https://example.com/demo",
     githubLink: "https://github.com/kovendhan5/mobile-fitness-app",
     date: "Sep 2024 - Dec 2024",
-  },
-  {
-    id: 9,
+  },  {
+    id: 13,
     title: "E-commerce Platform with Microservices",
     slug: "ecommerce-microservices",
     description: "Scalable e-commerce platform built with microservices architecture and containerization.",
