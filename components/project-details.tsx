@@ -1,9 +1,9 @@
 "use client"
 
 import type { Project } from "@/data/projects"; // Assuming you have a Project type defined
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 interface ProjectDetailsProps {
   project: Project
@@ -17,8 +17,8 @@ export default function ProjectDetails({ project }: ProjectDetailsProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >      <div className="relative aspect-video w-full">
-        {/* Prioritize screenshot images for the first 4 projects */}
-        {project.id <= 4 ? (
+        {/* Prioritize screenshot images for projects 1-4 and 9 */}
+        {(project.id <= 4 || project.id === 9) ? (
           <Image
             src={project.featuredImage || "/placeholder.svg"}
             alt={project.title}

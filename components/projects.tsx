@@ -64,8 +64,8 @@ export default function Projects() {
               }}
               onClick={() => window.location.href = `/projects/${project.slug}`}
             >              <div className="relative overflow-hidden aspect-video">
-                {/* Prioritize new GitHub screenshot images for the first 4 projects */}
-                {project.id <= 4 ? (
+                {/* Prioritize GitHub screenshot images for projects 1-4 and 9 */}
+                {(project.id <= 4 || project.id === 9) ? (
                   <Image
                     src={project.featuredImage || "/placeholder.svg"}
                     alt={project.title}

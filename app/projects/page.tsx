@@ -86,10 +86,9 @@ export default function ProjectsPage() {
                     y: -5,
                     transition: { duration: 0.2 },
                   }}
-                >                  {/* Project image/preview with overlay */}
-                  <div className="relative overflow-hidden aspect-video group">
-                    {/* Prioritize new GitHub screenshot images for the first 4 projects */}
-                    {project.id <= 4 ? (
+                >                  {/* Project image/preview with overlay */}                  <div className="relative overflow-hidden aspect-video group">
+                    {/* Prioritize GitHub screenshot images for projects 1-4 and 9 */}
+                    {(project.id <= 4 || project.id === 9) ? (
                       <Image
                         src={project.featuredImage || "/placeholder.svg"}
                         alt={project.title}
