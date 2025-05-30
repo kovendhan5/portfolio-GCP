@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import { Award, ExternalLink } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
 
 export default function Certifications() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -37,63 +37,63 @@ export default function Certifications() {
       title: "GitHub Foundations",
       issuer: "GitHub",
       date: "2024",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 2,
       title: "Cloud Computing",
       issuer: "NPTEL",
       date: "2023",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 3,
       title: "Ethical Hacking",
       issuer: "NPTEL",
       date: "2023",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 4,
       title: "Foundations of Cyber Security",
       issuer: "Google",
       date: "2024",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 5,
       title: "AWS Badges",
       issuer: "AWS",
       date: "2024",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 6,
       title: "Microsoft Azure Certifications",
       issuer: "Microsoft",
       date: "2024",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 7,
       title: "Java (Basics)",
       issuer: "HackerRank",
       date: "2023",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 8,
       title: "Python Demonstration for Practice Course",
       issuer: "Udemy",
       date: "2023",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
     {
       id: 9,
       title: "AWS for Beginners",
       issuer: "Great Learning",
       date: "2023",
-      link: "#",
+      link: "https://www.linkedin.com/in/kovendhanp/details/certifications/",
     },
   ]
 
