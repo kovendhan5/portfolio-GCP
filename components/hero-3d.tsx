@@ -1,67 +1,75 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, PerspectiveCamera, Environment, ContactShadows } from "@react-three/drei"
+import { MeshDistortMaterial, OrbitControls, Text } from "@react-three/drei"
+import { Canvas } from "@react-three/fiber"
 import { motion } from "framer-motion"
-import { useTheme } from "@/components/theme-provider"
-import type * as THREE from "three"
+import { Suspense, useEffect, useState } from "react"
 
-function Model({ theme }: { theme: string }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const [hovered, setHovered] = useState(false)
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005
-      meshRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1
-    }
-  })
-
+function ThreeScene() {
   return (
-    <mesh
-      ref={meshRef}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      scale={hovered ? 1.1 : 1}
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 75 }}
+      style={{ background: "transparent" }}
+      gl={{ alpha: true, antialias: true }}
     >
-      <icosahedronGeometry args={[1, 1]} />
-      <meshStandardMaterial
-        color={theme === "dark" ? "#22d3ee" : "#0891b2"}
-        wireframe={true}
-        emissive={theme === "dark" ? "#a855f7" : "#7e22ce"}
-        emissiveIntensity={0.5}
-      />
-    </mesh>
-  )
-}
-
-function FloatingCube({
-  position,
-  color,
-  speed = 1,
-  size = 0.2,
-}: { position: [number, number, number]; color: string; speed?: number; size?: number }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y += Math.sin(state.clock.getElapsedTime() * speed) * 0.002
-      meshRef.current.rotation.x += 0.005 * speed
-      meshRef.current.rotation.y += 0.01 * speed
-    }
-  })
-
-  return (
-    <mesh ref={meshRef} position={position}>
-      <boxGeometry args={[size, size, size]} />
-      <meshStandardMaterial color={color} />
-    </mesh>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <pointLight position={[-10, -10, -5]} intensity={0.5} color="#8b5cf6" />
+      <pointLight position={[10, -10, -5]} intensity={0.5} color="#06b6d4" />
+      
+      <Suspense fallback={null}>
+        <group>
+          {/* Main sphere with distortion */}
+          <mesh rotation={[0, 0, 0]}>
+            <sphereGeometry args={[1.5, 64, 64]} />
+            <MeshDistortMaterial
+              color="#8b5cf6"
+              attach="material"
+              distort={0.6}
+              speed={2}
+              roughness={0.1}
+              metalness={0.8}
+            />
+          </mesh>
+          
+          {/* Floating text */}
+          <Text
+            position={[0, 0, 2]}
+            fontSize={0.5}
+            color="#ffffff"
+            anchorX="center"
+            anchorY="middle"
+            font="/fonts/inter-bold.woff"
+            outlineWidth={0.02}
+            outlineColor="#000000"
+          >
+            KP
+          </Text>
+          
+          {/* Additional geometric elements */}
+          <mesh position={[3, 1, 0]} rotation={[0, 0, Math.PI / 4]}>
+            <boxGeometry args={[0.5, 0.5, 0.5]} />
+            <meshStandardMaterial color="#06b6d4" wireframe />
+          </mesh>
+          
+          <mesh position={[-3, -1, 0]}>
+            <octahedronGeometry args={[0.7]} />
+            <meshStandardMaterial color="#f59e0b" transparent opacity={0.7} />
+          </mesh>
+        </group>
+        
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          autoRotate
+          autoRotateSpeed={2}
+        />
+      </Suspense>
+    </Canvas>
   )
 }
 
 export default function Hero3D() {
-  const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -69,33 +77,63 @@ export default function Hero3D() {
   }, [])
 
   if (!mounted) {
-    return null
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="relative w-64 h-64">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-full blur-xl animate-pulse"></div>
+          <div className="relative w-full h-full bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+            <motion.div 
+              className="text-white text-4xl font-bold"
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              KP
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <motion.div
-      className="w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      className="w-full h-full"
     >
-      <Canvas>
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} />
-
-        <Model theme={theme} />
-
-        <FloatingCube position={[2, 0, -1]} color={theme === "dark" ? "#22d3ee" : "#0891b2"} speed={0.8} />
-        <FloatingCube position={[-2, 0, -1]} color={theme === "dark" ? "#a855f7" : "#7e22ce"} speed={1.2} />
-        <FloatingCube position={[0, 1.5, -1]} color={theme === "dark" ? "#2563eb" : "#1d4ed8"} speed={1} />
-        <FloatingCube position={[0, -1.5, -1]} color={theme === "dark" ? "#ec4899" : "#db2777"} speed={0.9} />
-
-        <ContactShadows position={[0, -1.5, 0]} opacity={0.4} scale={5} blur={2.5} far={4} />
-        <Environment preset="city" />
-        <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={0.5} />
-      </Canvas>
+      <Suspense fallback={
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="relative w-64 h-64">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-full blur-xl animate-pulse"></div>
+            <div className="relative w-full h-full bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+              <motion.div 
+                className="text-white text-4xl font-bold"
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                Loading...
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      }>
+        <ThreeScene />
+      </Suspense>
     </motion.div>
   )
 }

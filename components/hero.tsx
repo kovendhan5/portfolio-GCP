@@ -159,8 +159,7 @@ export default function Hero() {
                 <Linkedin className="w-6 h-6 group-hover:scale-110 transition-transform" />
                 <span className="sr-only">LinkedIn Profile</span>
               </Link>
-            </motion.div>
-            <motion.div
+            </motion.div>            <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -172,6 +171,12 @@ export default function Hero() {
               >
                 View My Work{" "}
                 <ArrowRight className="inline-block ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                href="/freelance"
+                className="px-8 py-3 rounded-full bg-background border border-primary/20 text-primary hover:bg-primary/10 transition-all duration-300"
+              >
+                Hire Me
               </Link>
               <Link
                 href="/contact"

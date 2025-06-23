@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { Moon, Sun } from "lucide-react"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -20,7 +20,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
   const navLinks = [
     { name: "About", href: "/#about" },
     { name: "Skills", href: "/#skills" },
@@ -28,10 +27,10 @@ export default function Navbar() {
     { name: "Experience", href: "/#experience" },
     { name: "Education", href: "/#education" },
     { name: "Certifications", href: "/#certifications" },
+    { name: "Freelance", href: "/freelance" },
     { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/#contact" },
   ]
-
   const isActive = (href: string) => {
     if (href.startsWith("/#")) {
       return pathname === "/"
@@ -40,6 +39,9 @@ export default function Navbar() {
       return true
     }
     if (href === "/projects" && pathname.startsWith("/projects/")) {
+      return true
+    }
+    if (href === "/freelance" && pathname === "/freelance") {
       return true
     }
     return pathname === href
