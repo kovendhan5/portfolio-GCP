@@ -1,17 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { usePathname } from "next/navigation"
+import { Moon, Sun } from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +21,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
   const navLinks = [
     { name: "About", href: "/#about" },
     { name: "Skills", href: "/#skills" },
@@ -29,17 +29,21 @@ export default function Navbar() {
     { name: "Education", href: "/#education" },
     { name: "Certifications", href: "/#certifications" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/#contact" },
+    { name: "Freelance", href: "/freelance" },    { name: "Contact", href: "/#contact" },
   ]
-
+  
   const isActive = (href: string) => {
     if (href.startsWith("/#")) {
+      // Hash links are only active when on the home page
       return pathname === "/"
     }
-    if (href === "/blog" && pathname.startsWith("/blog/")) {
+    if (href === "/blog" && pathname.startsWith("/blog")) {
       return true
     }
-    if (href === "/projects" && pathname.startsWith("/projects/")) {
+    if (href === "/projects" && pathname.startsWith("/projects")) {
+      return true
+    }
+    if (href === "/freelance" && pathname.startsWith("/freelance")) {
       return true
     }
     return pathname === href
@@ -72,14 +76,26 @@ export default function Navbar() {
                 className={cn(
                   "text-sm font-medium transition-colors duration-200",
                   isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary",
-                )}
-                onClick={(e) => {
+                )}                onClick={(e) => {
                   if (link.href.startsWith("/#")) {
                     e.preventDefault()
-                    const targetId = link.href.substring(2)
-                    document.querySelector(`#${targetId}`)?.scrollIntoView({
-                      behavior: "smooth",
-                    })
+                    // If we're not on the home page, navigate to home first
+                    if (pathname !== "/") {
+                      router.push("/")
+                      // Wait a bit for navigation to complete, then scroll
+                      setTimeout(() => {
+                        const targetId = link.href.substring(2)
+                        document.querySelector(`#${targetId}`)?.scrollIntoView({
+                          behavior: "smooth",
+                        })
+                      }, 100)
+                    } else {
+                      // If we're on home page, scroll to section
+                      const targetId = link.href.substring(2)
+                      document.querySelector(`#${targetId}`)?.scrollIntoView({
+                        behavior: "smooth",
+                      })
+                    }
                   }
                 }}
               >
@@ -97,10 +113,10 @@ export default function Navbar() {
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
 
-            {/* Mobile menu button */}
-            <button
+            {/* Mobile menu button */}            <button
               className="ml-4 md:hidden p-2 rounded-md text-muted-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {mobileMenuOpen ? (
@@ -127,14 +143,26 @@ export default function Navbar() {
                   isActive(link.href)
                     ? "text-primary bg-primary/10"
                     : "text-muted-foreground hover:text-primary hover:bg-primary/10",
-                )}
-                onClick={(e) => {
+                )}                onClick={(e) => {
                   if (link.href.startsWith("/#")) {
                     e.preventDefault()
-                    const targetId = link.href.substring(2)
-                    document.querySelector(`#${targetId}`)?.scrollIntoView({
-                      behavior: "smooth",
-                    })
+                    // If we're not on the home page, navigate to home first
+                    if (pathname !== "/") {
+                      router.push("/")
+                      // Wait a bit for navigation to complete, then scroll
+                      setTimeout(() => {
+                        const targetId = link.href.substring(2)
+                        document.querySelector(`#${targetId}`)?.scrollIntoView({
+                          behavior: "smooth",
+                        })
+                      }, 100)
+                    } else {
+                      // If we're on home page, scroll to section
+                      const targetId = link.href.substring(2)
+                      document.querySelector(`#${targetId}`)?.scrollIntoView({
+                        behavior: "smooth",
+                      })
+                    }
                     setMobileMenuOpen(false)
                   } else {
                     setMobileMenuOpen(false)

@@ -148,6 +148,86 @@ export const services: Service[] = [
     price: "Starting at $1,500",
     timeline: "1-3 weeks",
     category: "security"
+  },
+  {
+    id: 7,
+    title: "E-commerce Development",
+    icon: "Globe",
+    description: "Complete e-commerce solutions with payment processing, inventory management, and admin panels.",
+    features: [
+      "Shopping Cart Development",
+      "Payment Gateway Integration (Stripe, PayPal)",
+      "Inventory Management System",
+      "Order Processing & Fulfillment",
+      "Customer Account Management",
+      "Admin Dashboard",
+      "Mobile-Responsive Design",
+      "SEO Optimization for Products"
+    ],
+    technologies: ["React", "Next.js", "Stripe", "PostgreSQL", "Redis", "AWS S3", "Tailwind CSS"],
+    price: "Starting at $3,000",
+    timeline: "3-6 weeks",
+    category: "development"
+  },
+  {
+    id: 8,
+    title: "Mobile App Development",
+    icon: "Code",
+    description: "Cross-platform mobile applications with native performance using React Native.",
+    features: [
+      "Cross-platform Development (iOS & Android)",
+      "Native Performance Optimization",
+      "Push Notifications",
+      "Offline Data Synchronization",
+      "App Store Deployment",
+      "Backend API Integration",
+      "User Authentication",
+      "Real-time Features"
+    ],
+    technologies: ["React Native", "Expo", "TypeScript", "Firebase", "Redux", "AsyncStorage"],
+    price: "Starting at $4,000",
+    timeline: "4-8 weeks",
+    category: "development"
+  },
+  {
+    id: 9,
+    title: "Technical Consulting & Code Review",
+    icon: "Target",
+    description: "Expert technical guidance, architecture reviews, and code audits for your development team.",
+    features: [
+      "Code Quality Assessment",
+      "Architecture Review & Recommendations",
+      "Performance Optimization Strategies",
+      "Technology Stack Evaluation",
+      "Development Process Improvement",
+      "Team Training & Mentoring",
+      "Technical Documentation",
+      "Best Practices Implementation"
+    ],
+    technologies: ["Various based on project needs"],
+    price: "Starting at $150/hour",
+    timeline: "Flexible",
+    category: "consulting"
+  },
+  {
+    id: 10,
+    title: "Data Analytics & Visualization",
+    icon: "TrendingUp",
+    description: "Transform your data into actionable insights with custom analytics and visualization solutions.",
+    features: [
+      "Data Pipeline Development",
+      "ETL Process Implementation",
+      "Interactive Dashboard Creation",
+      "Real-time Analytics",
+      "Data Warehouse Setup",
+      "Business Intelligence Reports",
+      "KPI Tracking Systems",
+      "Predictive Analytics"
+    ],
+    technologies: ["Python", "Pandas", "D3.js", "Tableau", "PowerBI", "PostgreSQL", "InfluxDB"],
+    price: "Starting at $2,000",
+    timeline: "2-4 weeks",
+    category: "development"
   }
 ]
 
