@@ -1,917 +1,764 @@
-'use client';
+"use client"
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { services, testimonials } from '@/data/freelance';
-import { motion } from 'framer-motion';
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { motion, useScroll, useTransform } from "framer-motion"
 import {
     ArrowRight,
+    Award,
     Bot,
-    Building,
     CheckCircle,
     Clock,
-    Code,
+    Cloud,
     Database,
+    Download,
     Globe,
     Home,
-    Mail, MessageSquare,
-    Rocket,
-    Send,
+    Mail,
+    MessageSquare,
+    Phone,
     Server,
     Shield,
-    Star, Target,
-    Timer,
-    TrendingUp,
-    User,
+    Sparkles,
+    Star,
     Users,
     Zap
-} from 'lucide-react';
-import Link from 'next/link';
-import { memo, useCallback, useEffect, useState } from 'react';
+} from "lucide-react"
+import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
-// Helper function to get service icons
-const getServiceIcon = (iconName: string) => {
-  const iconProps = { className: "w-6 h-6 text-white" };
-  switch (iconName) {
-    case 'Globe': return <Globe {...iconProps} />;
-    case 'Code': return <Code {...iconProps} />;
-    case 'Server': return <Server {...iconProps} />;
-    case 'Database': return <Database {...iconProps} />;
-    case 'Shield': return <Shield {...iconProps} />;
-    case 'Cloud': return <TrendingUp {...iconProps} />;
-    case 'Bot': return <Bot {...iconProps} />;
-    case 'Target': return <Target {...iconProps} />;
-    case 'TrendingUp': return <TrendingUp {...iconProps} />;
-    default: return <Rocket {...iconProps} />;
-  }
-};
+export default function FreelancePage() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  })
+  
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isVisible, setIsVisible] = useState(false)
 
-// Service packages data - Conversion optimized
-const servicePacks = [
-  {
-    name: 'Starter',
-    price: '$799',
-    originalPrice: '$1,200',
-    duration: '5-7 days',
-    icon: <Code className="w-8 h-8" />,
-    gradient: 'from-green-500 to-blue-600',
-    glowColor: 'shadow-green-500/50',
-    features: [
-      '🚀 Professional Landing Page',
-      '📱 Mobile-First Responsive Design',
-      '🔍 SEO Optimization (Rank Higher)',
-      '📧 Contact Form + Lead Capture',
-      '⚡ Lightning Fast Loading',
-      '🔒 SSL Security Included',
-      '💯 100% Money-Back Guarantee',
-      '📞 Priority Support (48h)'
-    ],
-    popular: false,
-    description: 'Perfect for small businesses ready to dominate their local market online.',
-    urgency: '⏰ 3 spots left this month',
-    cta: 'Launch in 1 Week!'
-  },
-  {
-    name: 'Growth',
-    price: '$1,497',
-    originalPrice: '$2,500',
-    duration: '7-10 days',
-    icon: <TrendingUp className="w-8 h-8" />,
-    gradient: 'from-blue-500 to-purple-600',
-    glowColor: 'shadow-blue-500/50',
-    features: [
-      '🌐 Complete Multi-Page Website',
-      '🛒 E-commerce Ready (Sell Online)',
-      '📊 Advanced Analytics Dashboard',
-      '🤖 Marketing Automation Setup',
-      '🎨 Custom Branding & Design',
-      '📈 Conversion Optimization',
-      '🔄 Unlimited Revisions',
-      '📱 Progressive Web App (PWA)',
-      '☁️ Cloud Hosting Setup',
-      '🎯 Lead Generation Tools'
-    ],
-    popular: true,
-    description: 'Complete business solution for serious entrepreneurs ready to scale.',
-    urgency: '🔥 Most Popular - Only 2 spots available',
-    cta: 'Scale Your Business!'
-  },
-  {
-    name: 'Enterprise',
-    price: '$2,997',
-    originalPrice: '$5,000',
-    duration: '10-14 days',
-    icon: <Building className="w-8 h-8" />,
-    gradient: 'from-purple-500 to-pink-600',
-    glowColor: 'shadow-purple-500/50',
-    features: [
-      '🏢 Enterprise Web Application',
-      '🔐 Advanced User Management',
-      '💳 Payment Processing System',
-      '📊 Custom Dashboard & Reports',
-      '🔗 API Development & Integration',
-      '☁️ Scalable Cloud Infrastructure',
-      '🛡️ Enterprise Security',
-      '📱 Native Mobile App (iOS/Android)',
-      '🤝 Dedicated Account Manager',
-      '⚡ Priority Development Lane',
-      '🔧 6 Months Maintenance Included',
-      '📞 24/7 Priority Support'
-    ],
-    popular: false,
-    description: 'Enterprise-grade solution for companies serious about digital transformation.',
-    urgency: '💎 Exclusive - 1 slot per month',
-    cta: 'Transform Your Business!'
-  }
-];
-
-const FreelancePage = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedService, setSelectedService] = useState<number | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-    service: '',
-    budget: '',
-    timeline: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.2])
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
+    const updateMousePosition = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
 
-  // Filter services
-  const filteredServices = selectedCategory === 'all' 
-    ? services 
-    : services.filter(service => service.category === selectedCategory);
+    window.addEventListener("mousemove", updateMousePosition)
+    setIsVisible(true)
 
-  const categories = [
-    { value: 'all', label: '🎯 All Services', count: services.length },
-    { value: 'development', label: '💻 Development', count: services.filter(s => s.category === 'development').length },
-    { value: 'devops', label: '☁️ DevOps', count: services.filter(s => s.category === 'devops').length },
-    { value: 'automation', label: '🤖 Automation', count: services.filter(s => s.category === 'automation').length },
-    { value: 'security', label: '🛡️ Security', count: services.filter(s => s.category === 'security').length },
-    { value: 'consulting', label: '💡 Consulting', count: services.filter(s => s.category === 'consulting').length },
-  ];
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition)
+    }
+  }, [])
 
-  // Optimized animation variants for better performance
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        duration: 0.3
+        delayChildren: 0.3
       }
     }
-  };
+  }
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 50, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.4,
-        ease: "easeOut"
+        type: "spring" as const,
+        damping: 20,
+        stiffness: 100
       }
     }
-  };
+  }
 
-  const scrollToForm = useCallback(() => {
-    const formElement = document.getElementById('contact-form');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const services = [
+    {
+      title: "Full-Stack Web Development",
+      icon: <Globe className="h-8 w-8" />,
+      description: "End-to-end web application development with modern frameworks and scalable architecture.",
+      features: [
+        "React.js & Next.js Applications",
+        "Node.js & Express.js Backend",
+        "Database Design & Integration",
+        "RESTful API Development",
+        "Authentication & Security",
+        "Responsive UI/UX Design"
+      ],
+      technologies: ["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "MongoDB"],
+      price: "Starting at $2,500",
+      timeline: "2-6 weeks"
+    },
+    {
+      title: "Cloud Infrastructure & DevOps",
+      icon: <Cloud className="h-8 w-8" />,
+      description: "Scalable cloud solutions with automated deployment and infrastructure as code.",
+      features: [
+        "AWS/GCP/Azure Cloud Setup",
+        "Docker Containerization",
+        "Kubernetes Orchestration",
+        "CI/CD Pipeline Implementation",
+        "Infrastructure as Code (Terraform)",
+        "Monitoring & Logging Solutions"
+      ],
+      technologies: ["AWS", "GCP", "Docker", "Kubernetes", "Terraform", "GitHub Actions"],
+      price: "Starting at $1,800",
+      timeline: "1-4 weeks"
+    },
+    {
+      title: "API Development & Integration",
+      icon: <Server className="h-8 w-8" />,
+      description: "Robust API development and third-party service integrations for seamless connectivity.",
+      features: [
+        "RESTful API Development",
+        "GraphQL Implementation",
+        "Third-party API Integration",
+        "Microservices Architecture",
+        "API Documentation",
+        "Rate Limiting & Security"
+      ],
+      technologies: ["Node.js", "Express", "FastAPI", "PostgreSQL", "Redis", "JWT"],
+      price: "Starting at $1,200",
+      timeline: "1-3 weeks"
+    },
+    {
+      title: "Database Design & Optimization",
+      icon: <Database className="h-8 w-8" />,
+      description: "Efficient database architecture and performance optimization for your applications.",
+      features: [
+        "Database Schema Design",
+        "Query Optimization",
+        "Data Migration Services",
+        "Backup & Recovery Solutions",
+        "Performance Monitoring",
+        "Scaling Strategies"
+      ],
+      technologies: ["PostgreSQL", "MongoDB", "Redis", "MySQL", "Elasticsearch"],
+      price: "Starting at $800",
+      timeline: "1-2 weeks"
+    },
+    {
+      title: "Automation & Scripting",
+      icon: <Bot className="h-8 w-8" />,
+      description: "Custom automation solutions to streamline your business processes and workflows.",
+      features: [
+        "Process Automation",
+        "Data Processing Scripts",
+        "Web Scraping Solutions",
+        "Report Generation",
+        "System Integration",
+        "Task Scheduling"
+      ],
+      technologies: ["Python", "PowerShell", "Bash", "Selenium", "BeautifulSoup"],
+      price: "Starting at $600",
+      timeline: "1-2 weeks"
+    },
+    {
+      title: "Security & Penetration Testing",
+      icon: <Shield className="h-8 w-8" />,
+      description: "Comprehensive security assessment and vulnerability testing for your applications.",
+      features: [
+        "Vulnerability Assessment",
+        "Penetration Testing",
+        "Security Code Review",
+        "Compliance Auditing",
+        "Security Training",
+        "Incident Response"
+      ],
+      technologies: ["Kali Linux", "Metasploit", "Burp Suite", "OWASP", "Nessus"],
+      price: "Starting at $1,500",
+      timeline: "1-3 weeks"
     }
-  }, []);
+  ]
 
-  const validateForm = useCallback(() => {
-    const errors: Record<string, string> = {};
-    
-    if (!formData.name.trim()) errors.name = 'Name is required';
-    if (!formData.email.trim()) errors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = 'Email is invalid';
-    if (!formData.message.trim()) errors.message = 'Message is required';
-    if (!formData.service) errors.service = 'Please select a service';
-    
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  }, [formData]);
+  const techStack = [
+    { category: "Frontend", techs: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+    { category: "Backend", techs: ["Node.js", "Express.js", "Python", "FastAPI", "Java"] },
+    { category: "Database", techs: ["PostgreSQL", "MongoDB", "Redis", "MySQL", "Elasticsearch"] },
+    { category: "Cloud", techs: ["AWS", "Google Cloud", "Azure", "Docker", "Kubernetes"] },
+    { category: "DevOps", techs: ["GitHub Actions", "Jenkins", "Terraform", "NGINX", "GitLab"] },
+    { category: "Tools", techs: ["Git", "VS Code", "Jupyter", "Postman", "Figma"] }
+  ]
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Clear error when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+  const achievements = [
+    {
+      icon: <Award className="h-6 w-6" />,
+      title: "50+ Projects Delivered",
+      description: "Successfully completed projects across various industries"
+    },
+    {
+      icon: <Users className="h-6 w-6" />,
+      title: "25+ Happy Clients",
+      description: "Maintained 100% client satisfaction rate"
+    },
+    {
+      icon: <Clock className="h-6 w-6" />,
+      title: "On-Time Delivery",
+      description: "98% of projects delivered on or before deadline"
+    },
+    {
+      icon: <Star className="h-6 w-6" />,
+      title: "5-Star Reviews",
+      description: "Consistently rated 5 stars by clients"
     }
-  }, [formErrors]);
+  ]
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call - you can replace this with actual form submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
-        service: '',
-        budget: '',
-        timeline: ''
-      });
-      
-      alert('🎉 Thank you! I\'ll get back to you within 24 hours with a detailed proposal.');
-    } catch (error) {
-      alert('❌ Something went wrong. Please try again or email me directly.');
-    } finally {
-      setIsSubmitting(false);
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "CTO, TechStart Inc.",
+      content: "Kovendhan delivered exceptional work on our web application. His attention to detail and technical expertise exceeded our expectations.",
+      rating: 5
+    },
+    {
+      name: "Michael Chen",
+      role: "Founder, DataFlow Solutions",
+      content: "Outstanding cloud infrastructure setup. The deployment process is now seamless and our application scales perfectly.",
+      rating: 5
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Product Manager, InnovateCorp",
+      content: "Professional, reliable, and skilled. Kovendhan transformed our legacy system into a modern, efficient application.",
+      rating: 5
     }
-  }, [formData, validateForm]);
+  ]
+
+  const workProcess = [
+    {
+      step: "1",
+      title: "Discovery & Planning",
+      description: "Understanding your requirements, goals, and technical constraints"
+    },
+    {
+      step: "2",
+      title: "Design & Architecture",
+      description: "Creating detailed technical specifications and system design"
+    },
+    {
+      step: "3",
+      title: "Development & Testing",
+      description: "Agile development with continuous testing and quality assurance"
+    },
+    {
+      step: "4",
+      title: "Deployment & Support",
+      description: "Production deployment with ongoing support and maintenance"
+    }
+  ]
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white overflow-hidden relative">
-      {/* Optimized Background */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-blue-950/30 to-purple-950/30" />
-        {/* Simplified background pattern - fewer elements for better performance */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-        </div>
+    <motion.div 
+      ref={containerRef}
+      className="min-h-screen bg-background relative overflow-hidden"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
+    >
+      {/* Floating Background Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full opacity-20"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -100, 0],
+              scale: [1, 1.5, 1],
+              rotate: [0, 180, 360]
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
       </div>
+
+      {/* Mouse Follower */}
+      <motion.div
+        className="fixed w-6 h-6 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full pointer-events-none z-50 mix-blend-difference"
+        animate={{
+          x: mousePosition.x - 12,
+          y: mousePosition.y - 12,
+        }}
+        transition={{
+          type: "spring",
+          damping: 30,
+          stiffness: 200,
+          mass: 0.5
+        }}
+      />
 
       {/* Home Button */}
       <motion.div
+        className="fixed top-6 left-6 z-50"
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.3 }}
-        className="fixed top-6 left-6 z-50"
+        transition={{ delay: 0.5, type: "spring", damping: 20 }}
       >
         <Link href="/">
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-gray-900/80 border-gray-600/50 text-gray-300 hover:bg-gray-800/90 hover:border-gray-500 hover:text-white backdrop-blur-md transition-all duration-200"
+          <motion.div
+            className="group relative p-3 bg-background/80 backdrop-blur-md border border-primary/20 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            whileHover={{ 
+              scale: 1.1,
+              backgroundColor: "hsl(var(--primary))",
+              borderColor: "hsl(var(--primary))"
+            }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Home className="w-4 h-4 mr-2" />
-            Home
-          </Button>
+            <Home className="h-6 w-6 text-primary group-hover:text-primary-foreground transition-colors" />
+            <motion.div
+              className="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full opacity-0 group-hover:opacity-20 -z-10"
+              initial={false}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            />
+          </motion.div>
         </Link>
       </motion.div>
 
-      <div className="relative z-10">
-        {/* Hero Section - Conversion Optimized */}
-        <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center max-w-6xl mx-auto"
-            initial="hidden"
-            animate={isLoaded ? "visible" : "hidden"}
-            variants={containerVariants}
+      {/* Enhanced Hero Section */}
+      <section className="relative py-20 overflow-hidden min-h-screen flex items-center">
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"
+          style={{ y: backgroundY, scale: backgroundScale }}
+        />
+        
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            variants={itemVariants}
+            className="text-center max-w-5xl mx-auto"
           >
-            <motion.div variants={itemVariants} className="mb-8">
-              <Badge variant="outline" className="mb-4 px-6 py-2 text-sm bg-gradient-to-r from-green-500/20 to-blue-500/20 border-green-500/40 text-green-400">
-                <Timer className="w-4 h-4 mr-2" />
-                ⚡ Limited Slots Available - Book Now!
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: "spring", damping: 20 }}
+              className="inline-flex items-center gap-2 mb-6"
+            >
+              <Sparkles className="h-5 w-5 text-yellow-500" />
+              <Badge variant="outline" className="text-lg px-4 py-2 border-primary/30 bg-primary/5">
+                Available for Freelance Projects
               </Badge>
+              <Sparkles className="h-5 w-5 text-yellow-500" />
             </motion.div>
 
-            <motion.h1 
-              variants={itemVariants}
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-blue-500"
+            <motion.h1
+              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 relative"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
             >
-              Turn Your Vision Into
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 animate-gradient-x">
+                Professional Freelance
+              </span>
               <br />
-              <span className="text-white">Revenue Reality</span>
+              <motion.span 
+                className="text-foreground relative inline-block"
+                animate={{ 
+                  textShadow: [
+                    "0 0 0px rgba(0,0,0,0)",
+                    "0 0 20px rgba(34, 211, 238, 0.5)",
+                    "0 0 0px rgba(0,0,0,0)"
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                Development Services
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 blur-lg -z-10"
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+              </motion.span>
             </motion.h1>
 
-            <motion.p 
-              variants={itemVariants}
-              className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
+            <motion.p
+              className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
             >
-              <strong className="text-white">ROI-focused development</strong> that transforms your business ideas into profitable, 
-              high-performance web solutions. Get your project delivered on time, on budget, with guaranteed results.
+              Full-stack developer specializing in modern web applications, cloud infrastructure,
+              and DevOps solutions. Let's bring your ideas to life with cutting-edge technology.
             </motion.p>
-
-            {/* Value Props */}
-            <motion.div 
-              variants={itemVariants}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto"
+            
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
             >
-              {[
-                { icon: <Clock className="w-6 h-6" />, title: "Fast Delivery", desc: "2-6 weeks max" },
-                { icon: <Shield className="w-6 h-6" />, title: "100% Guarantee", desc: "Money-back promise" },
-                { icon: <Users className="w-6 h-6" />, title: "50+ Happy Clients", desc: "98% satisfaction rate" }
-              ].map((prop, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-gray-900/50 rounded-lg backdrop-blur-sm">
-                  <div className="text-blue-400">{prop.icon}</div>
-                  <div className="text-left">
-                    <div className="font-semibold text-white">{prop.title}</div>
-                    <div className="text-sm text-gray-400">{prop.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
-            >
-              <Button 
-                size="lg" 
-                onClick={scrollToForm}
-                className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-10 py-5 rounded-full text-xl font-bold shadow-xl hover:shadow-green-500/25 transition-all duration-200 animate-pulse"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                🚀 Get Free Quote (24h Response)
-                <ArrowRight className="ml-2 w-6 h-6" />
-              </Button>
-              
-              <Link href="/projects">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10 px-8 py-5 rounded-full text-lg font-semibold"
-                >
-                  See Success Stories
-                  <Star className="ml-2 w-5 h-5" />
+                <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Zap className="mr-2 h-5 w-5" />
+                  Start Your Project
                 </Button>
-              </Link>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-primary/30 hover:bg-primary/10 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Download className="mr-2 h-5 w-5" />
+                  Download Portfolio
+                </Button>
+              </motion.div>
             </motion.div>
 
-            {/* Enhanced Stats */}
-            <motion.div 
-              variants={itemVariants}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
+            {/* Floating Stats */}
+            <motion.div
+              className="flex flex-wrap gap-8 justify-center mt-16"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.6 }}
             >
               {[
-                { number: "50+", label: "Projects Delivered", icon: <Rocket className="w-6 h-6" /> },
-                { number: "98%", label: "Client Satisfaction", icon: <Star className="w-6 h-6" /> },
-                { number: "24h", label: "Response Time", icon: <Clock className="w-6 h-6" /> },
-                { number: "$2M+", label: "Client Revenue Generated", icon: <TrendingUp className="w-6 h-6" /> }
+                { label: "Projects Completed", value: "50+" },
+                { label: "Happy Clients", value: "25+" },
+                { label: "Success Rate", value: "98%" },
+                { label: "Response Time", value: "<2h" }
               ].map((stat, index) => (
-                <div key={index} className="text-center p-4 bg-gray-900/30 rounded-lg backdrop-blur-sm">
-                  <div className="flex justify-center mb-2 text-blue-400">{stat.icon}</div>
-                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                    {stat.number}
-                  </div>
-                  <div className="text-gray-400 mt-2 text-sm md:text-base">{stat.label}</div>
-                </div>
+                <motion.div
+                  key={index}
+                  className="text-center"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", damping: 20 }}
+                >
+                  <motion.div
+                    className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-purple-600"
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.5
+                    }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </motion.div>
               ))}
             </motion.div>
           </motion.div>
-        </section>
+        </div>
+      </section>
 
-        {/* Service Packages - Conversion Optimized */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
-          <div className="max-w-7xl mx-auto">
-            <motion.div 
-              className="text-center mb-16"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                  Fixed-Price
-                </span>{" "}
-                Packages
-              </motion.h2>
-              <motion.p variants={itemVariants} className="text-xl text-gray-300 max-w-3xl mx-auto mb-4">
-                No hidden fees, no surprises. Choose your package and get started immediately.
-              </motion.p>
-              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 bg-red-500/20 text-red-400 px-4 py-2 rounded-full text-sm font-semibold">
-                <Timer className="w-4 h-4" />
-                Limited Time: Save up to 40% - Ends This Month!
-              </motion.div>
-            </motion.div>
+      {/* Services Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">My Services</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Comprehensive development services tailored to your business needs
+            </p>
+          </motion.div>
 
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              {servicePacks.map((pack, index) => (
-                <motion.div
-                  key={pack.name}
-                  variants={itemVariants}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className={`relative group ${pack.popular ? 'order-first md:order-none' : ''}`}
-                >
-                  {pack.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <Badge className="bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-2 text-sm font-bold animate-pulse">
-                        🔥 BEST VALUE
-                      </Badge>
-                    </div>
-                  )}
-                  
-                  <Card className={`h-full bg-gray-900/80 border-gray-700/50 backdrop-blur-sm transition-all duration-200 group-hover:border-green-500/50 group-hover:shadow-2xl ${pack.glowColor} ${pack.popular ? 'border-green-500/50 shadow-lg shadow-green-500/20 scale-105' : ''}`}>
-                    <CardHeader className="text-center pb-6">
-                      <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${pack.gradient} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
-                        {pack.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                        {service.icon}
                       </div>
-                      <CardTitle className="text-2xl text-white mb-2">{pack.name}</CardTitle>
+                      <CardTitle className="text-xl">{service.title}</CardTitle>
+                    </div>
+                    <CardDescription className="text-base">
+                      {service.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2">What's Included:</h4>
+                        <ul className="space-y-1">
+                          {service.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                       
-                      {/* Pricing with discount */}
-                      <div className="mb-2">
-                        <div className="text-gray-400 line-through text-lg">{pack.originalPrice}</div>
-                        <div className="text-4xl font-bold text-green-400">{pack.price}</div>
-                        <div className="text-sm text-green-400 font-semibold">
-                          Save {Math.round((1 - parseInt(pack.price.replace('$', '').replace(',', '')) / parseInt(pack.originalPrice.replace('$', '').replace(',', ''))) * 100)}%
+                      <div>
+                        <h4 className="font-semibold mb-2">Technologies:</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {service.technologies.map((tech, idx) => (
+                            <Badge key={idx} variant="secondary" className="text-xs">
+                              {tech}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
-                      
-                      <div className="text-blue-400 font-semibold mb-2">⚡ {pack.duration}</div>
-                      <div className="text-sm text-orange-400 font-semibold mb-4">{pack.urgency}</div>
-                      <CardDescription className="text-gray-300 text-sm">
-                        {pack.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2 mb-6 max-h-64 overflow-y-auto">
-                        {pack.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start text-gray-300 text-sm">
-                            <CheckCircle className="w-4 h-4 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                      <Button 
-                        onClick={() => {
-                          setFormData(prev => ({...prev, service: pack.name, budget: pack.price}));
-                          scrollToForm();
-                        }}
-                        className={`w-full py-4 text-lg font-bold ${
-                          pack.popular 
-                            ? 'bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 animate-pulse' 
-                            : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-                        }`}
-                      >
-                        {pack.cta}
-                        <Rocket className="ml-2 w-5 h-5" />
-                      </Button>
-                      <div className="text-center text-xs text-gray-400 mt-2">
-                        💯 Money-back guarantee • No hidden fees
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-            
-            {/* Social Proof */}
-            <motion.div 
-              className="text-center mt-16"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.div variants={itemVariants} className="flex justify-center items-center gap-8 flex-wrap text-gray-400">
-                <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  <span className="font-semibold">4.9/5 Rating</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-blue-400" />
-                  <span className="font-semibold">50+ Happy Clients</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-green-400" />
-                  <span className="font-semibold">24h Response</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-purple-400" />
-                  <span className="font-semibold">100% Money Back</span>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
 
-        {/* Testimonials - Optimized */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div 
-              className="text-center mb-16"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-6">
-                Real Results from <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Real Clients</span>
-              </motion.h2>
-              <motion.p variants={itemVariants} className="text-xl text-gray-300 max-w-3xl mx-auto mb-4">
-                Join 50+ successful businesses that chose to work with me
-              </motion.p>
-              <motion.div variants={itemVariants} className="flex justify-center items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-6 h-6 text-yellow-400 fill-yellow-400" />
-                ))}
-                <span className="ml-2 text-yellow-400 font-semibold">4.9/5 Average Rating</span>
-              </motion.div>
-            </motion.div>
-
-            {/* Featured Testimonials */}
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              {testimonials.slice(0, 4).map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
-                  className="group"
-                >
-                  <Card className="h-full bg-gray-900/60 border-gray-700/50 backdrop-blur-sm transition-all duration-200 group-hover:border-blue-500/50 group-hover:shadow-lg group-hover:shadow-blue-500/20">
-                    <CardContent className="p-6">
-                      <div className="flex items-center mb-4">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`w-4 h-4 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`} 
-                          />
-                        ))}
-                        <Badge variant="outline" className="ml-auto text-xs border-green-500/50 text-green-400">
-                          ✅ Verified
-                        </Badge>
-                      </div>
+                      <Separator />
                       
-                      <blockquote className="text-gray-300 mb-4 text-sm leading-relaxed">
-                        "{testimonial.content.substring(0, 200)}..."
-                      </blockquote>
-                      
-                      <div className="flex items-center justify-between">
+                      <div className="flex justify-between items-center">
                         <div>
-                          <div className="font-semibold text-white text-sm">{testimonial.name}</div>
-                          <div className="text-xs text-gray-400">{testimonial.role} • {testimonial.company}</div>
+                          <p className="font-semibold text-lg text-primary">{service.price}</p>
+                          <p className="text-sm text-muted-foreground">{service.timeline}</p>
                         </div>
-                        <div className="text-xs text-blue-400 font-semibold">{testimonial.projectType}</div>
+                        <Button variant="outline" size="sm">
+                          Get Quote
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* CTA after testimonials */}
-            <motion.div 
-              className="text-center"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.div variants={itemVariants} className="bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-500/30 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-white mb-4">Ready to Join Them?</h3>
-                <p className="text-gray-300 mb-6">Get your free consultation and project quote within 24 hours</p>
-                <Button 
-                  size="lg"
-                  onClick={scrollToForm}
-                  className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-4 rounded-full text-lg font-bold"
-                >
-                  🚀 Get My Free Quote
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
-            </motion.div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact Form - Conversion Optimized */}
-        <section id="contact-form" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-blue-950/30 to-purple-950/30">
-          <div className="max-w-4xl mx-auto">
-            <motion.div 
-              className="text-center mb-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-6">
-                Get Your Free <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Quote in 24h</span>
-              </motion.h2>
-              <motion.p variants={itemVariants} className="text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-                Tell me about your project and I'll send you a detailed proposal with timeline and pricing.
-              </motion.p>
-              <motion.div variants={itemVariants} className="flex justify-center items-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>Free consultation</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>24h response</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  <span>No obligation</span>
-                </div>
+      {/* Tech Stack Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">Technology Stack</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Modern technologies and tools I use to build exceptional solutions
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {techStack.map((category, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-center">{category.category}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {category.techs.map((tech, idx) => (
+                        <Badge key={idx} variant="outline" className="text-sm">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm shadow-2xl">
-                <CardContent className="p-8">
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Simplified form - only essential fields */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                          Your Name *
-                        </label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                          <Input
-                            id="name"
-                            name="name"
-                            type="text"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className={`pl-10 bg-gray-800/60 border-gray-600 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 ${formErrors.name ? 'border-red-500' : ''}`}
-                            placeholder="John Smith"
-                          />
-                        </div>
-                        {formErrors.name && <p className="text-red-400 text-sm mt-1">{formErrors.name}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                          Email Address *
-                        </label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className={`pl-10 bg-gray-800/60 border-gray-600 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 ${formErrors.email ? 'border-red-500' : ''}`}
-                            placeholder="john@company.com"
-                          />
-                        </div>
-                        {formErrors.email && <p className="text-red-400 text-sm mt-1">{formErrors.email}</p>}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-2">
-                          What do you need? *
-                        </label>
-                        <select
-                          id="service"
-                          name="service"
-                          value={formData.service}
-                          onChange={handleInputChange}
-                          className={`w-full bg-gray-800/60 border-gray-600 text-white focus:border-green-500 focus:ring-green-500/20 rounded-md px-3 py-3 ${formErrors.service ? 'border-red-500' : ''}`}
-                        >
-                          <option value="">Choose your project type</option>
-                          <option value="Starter Package">🚀 Starter Package ($799)</option>
-                          <option value="Growth Package">📈 Growth Package ($1,497)</option>
-                          <option value="Enterprise Package">🏢 Enterprise Package ($2,997)</option>
-                          <option value="Custom Website">🌐 Custom Website</option>
-                          <option value="E-commerce Store">🛒 E-commerce Store</option>
-                          <option value="Web Application">⚡ Web Application</option>
-                          <option value="Mobile App">📱 Mobile App</option>
-                          <option value="Not Sure">🤔 Not sure yet</option>
-                        </select>
-                        {formErrors.service && <p className="text-red-400 text-sm mt-1">{formErrors.service}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="budget" className="block text-sm font-medium text-gray-300 mb-2">
-                          Budget Range
-                        </label>
-                        <select
-                          id="budget"
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleInputChange}
-                          className="w-full bg-gray-800/60 border-gray-600 text-white focus:border-green-500 focus:ring-green-500/20 rounded-md px-3 py-3"
-                        >
-                          <option value="">Select your budget</option>
-                          <option value="$500-$1000">💰 $500 - $1,000</option>
-                          <option value="$1000-$2500">💎 $1,000 - $2,500</option>
-                          <option value="$2500-$5000">🚀 $2,500 - $5,000</option>
-                          <option value="$5000+">🏆 $5,000+</option>
-                          <option value="Not Sure">🤷 Not sure yet</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                        Tell me about your project *
-                      </label>
-                      <div className="relative">
-                        <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                        <Textarea
-                          id="message"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          rows={5}
-                          className={`pl-10 pt-10 bg-gray-800/60 border-gray-600 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 ${formErrors.message ? 'border-red-500' : ''}`}
-                          placeholder="Describe your project, goals, and any specific requirements. The more details you provide, the better I can help you!"
-                        />
-                      </div>
-                      {formErrors.message && <p className="text-red-400 text-sm mt-1">{formErrors.message}</p>}
-                    </div>
-
-                    <div>
-                      <label htmlFor="timeline" className="block text-sm font-medium text-gray-300 mb-2">
-                        When do you need this completed?
-                      </label>
-                      <select
-                        id="timeline"
-                        name="timeline"
-                        value={formData.timeline}
-                        onChange={handleInputChange}
-                        className="w-full bg-gray-800/60 border-gray-600 text-white focus:border-green-500 focus:ring-green-500/20 rounded-md px-3 py-3"
-                      >
-                        <option value="">Select timeline</option>
-                        <option value="ASAP">🔥 ASAP (Rush job - 50% extra)</option>
-                        <option value="1-2 weeks">⚡ 1-2 weeks</option>
-                        <option value="2-4 weeks">📅 2-4 weeks (Recommended)</option>
-                        <option value="1-2 months">📆 1-2 months</option>
-                        <option value="Flexible">🤝 Flexible timeline</option>
-                      </select>
-                    </div>
-
-                    <div className="pt-6 border-t border-gray-700/50">
-                      <Button 
-                        type="submit" 
-                        disabled={isSubmitting}
-                        className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white py-4 text-lg font-bold rounded-xl transition-all duration-200 disabled:opacity-50"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            🚀 Get My Free Quote (24h Response)
-                            <Send className="ml-2 w-5 h-5" />
-                          </>
-                        )}
-                      </Button>
-                      <p className="text-center text-sm text-gray-400 mt-4">
-                        💯 100% free consultation • No spam, ever • Usually respond within 2-4 hours
-                      </p>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Trust indicators below form */}
-            <motion.div 
-              className="mt-12 text-center"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.div variants={itemVariants} className="flex justify-center items-center gap-8 flex-wrap text-gray-400 text-sm">
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-400" />
-                  <span>SSL Secured</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-blue-400" />
-                  <span>24h Response</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-400" />
-                  <span>5-Star Rated</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-purple-400" />
-                  <span>50+ Happy Clients</span>
-                </div>
-              </motion.div>
-            </motion.div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Why Choose Me Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div 
-              className="text-center mb-16"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-6">
-                Why Choose <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Me</span>
-              </motion.h2>
-              <motion.p variants={itemVariants} className="text-xl text-gray-300 max-w-3xl mx-auto">
-                The difference is in the details and the results I deliver
-              </motion.p>
-            </motion.div>
+      {/* Achievements Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">Track Record</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Proven results and client satisfaction
+            </p>
+          </motion.div>
 
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              {[
-                {
-                  icon: <Target className="w-8 h-8" />,
-                  title: "ROI-Focused",
-                  description: "Every project designed to maximize your return on investment and business growth"
-                },
-                {
-                  icon: <Zap className="w-8 h-8" />,
-                  title: "Lightning Fast",
-                  description: "Quick delivery without compromising quality - most projects completed in 1-2 weeks"
-                },
-                {
-                  icon: <Shield className="w-8 h-8" />,
-                  title: "Risk-Free",
-                  description: "100% money-back guarantee if you're not completely satisfied with the results"
-                },
-                {
-                  icon: <TrendingUp className="w-8 h-8" />,
-                  title: "Future-Proof",
-                  description: "Scalable solutions that grow with your business and adapt to changing needs"
-                }
-              ].map((benefit, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-center group"
-                >
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-200">
-                    <div className="text-white">{benefit.icon}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {achievements.map((achievement, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full text-primary mb-4">
+                  {achievement.icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-2">{achievement.title}</h3>
+                <p className="text-muted-foreground">{achievement.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Work Process Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">How I Work</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              A structured approach to deliver exceptional results
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {workProcess.map((process, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full text-white text-xl font-bold mb-4">
+                  {process.step}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{process.title}</h3>
+                <p className="text-muted-foreground">{process.description}</p>
+                {index < workProcess.length - 1 && (
+                  <div className="hidden lg:block absolute top-8 left-full w-full">
+                    <ArrowRight className="h-6 w-6 text-muted-foreground mx-auto" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-4">{benefit.title}</h3>
-                  <p className="text-gray-400 text-sm">{benefit.description}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+                )}
+              </motion.div>
+            ))}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      {/* Floating CTA */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <Button
-          onClick={scrollToForm}
-          size="lg"
-          className="rounded-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 shadow-xl hover:shadow-green-500/25 w-16 h-16 p-0 animate-bounce"
-        >
-          <MessageSquare className="w-6 h-6 text-white" />
-        </Button>
-      </div>
-    </div>
-  );
-};
+      {/* Testimonials Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">Client Testimonials</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              What my clients say about working with me
+            </p>
+          </motion.div>
 
-export default memo(FreelancePage);
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-muted-foreground mb-4 italic">
+                      "{testimonial.content}"
+                    </p>
+                    <div>
+                      <p className="font-semibold">{testimonial.name}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h2 className="text-4xl font-bold mb-6">Ready to Start Your Project?</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Let's discuss your requirements and create something amazing together.
+              I'm available for both short-term projects and long-term partnerships.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="text-lg px-8">
+                <Mail className="mr-2 h-5 w-5" />
+                Get in Touch
+              </Button>
+              <Button variant="outline" size="lg" className="text-lg px-8">
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Schedule a Call
+              </Button>
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                kovendhan.dev@gmail.com
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                Available for consultation
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </motion.div>
+  )
+}

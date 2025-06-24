@@ -16,11 +16,11 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
-    }
+      setScrolled(window.scrollY > 10)    }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+  
   const navLinks = [
     { name: "About", href: "/#about" },
     { name: "Skills", href: "/#skills" },
@@ -29,9 +29,9 @@ export default function Navbar() {
     { name: "Education", href: "/#education" },
     { name: "Certifications", href: "/#certifications" },
     { name: "Blog", href: "/blog" },
-    { name: "Freelance", href: "/freelance" },    { name: "Contact", href: "/#contact" },
+    { name: "Freelance", href: "/freelance" },
+    { name: "Contact", href: "/#contact" },
   ]
-  
   const isActive = (href: string) => {
     if (href.startsWith("/#")) {
       // Hash links are only active when on the home page
@@ -42,8 +42,7 @@ export default function Navbar() {
     }
     if (href === "/projects" && pathname.startsWith("/projects")) {
       return true
-    }
-    if (href === "/freelance" && pathname.startsWith("/freelance")) {
+    }    if (href === "/freelance" && pathname.startsWith("/freelance")) {
       return true
     }
     return pathname === href

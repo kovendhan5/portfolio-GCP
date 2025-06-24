@@ -146,8 +146,7 @@ export const services: Service[] = [
     ],
     technologies: ["Kali Linux", "Metasploit", "Burp Suite", "OWASP ZAP", "Nessus", "Wireshark"],
     price: "Starting at $1,500",
-    timeline: "1-3 weeks",
-    category: "security"
+    timeline: "1-3 weeks",    category: "security"
   },
   {
     id: 7,

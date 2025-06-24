@@ -171,8 +171,7 @@ export default function Hero() {
               >
                 View My Work{" "}
                 <ArrowRight className="inline-block ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
+              </Link>              <Link
                 href="/freelance"
                 className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 group"
               >
